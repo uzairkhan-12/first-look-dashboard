@@ -212,31 +212,7 @@ const SummaryTab = () => {
         </div>
       </div>
 
-      {/* Charts Row 2: Sector + Size Bucket Comparison */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="rounded-lg border border-border bg-card p-4">
-          <h3 className="text-sm font-medium text-muted-foreground mb-4">Sector Distribution — 2024</h3>
-          <ResponsiveContainer width="100%" height={220}>
-            <PieChart>
-              <Pie data={m24.sectors} dataKey="count" nameKey="sector" cx="50%" cy="50%" outerRadius={85} label={({ sector, count }) => `${sector} (${count})`} labelLine={{ stroke: "hsl(215, 12%, 35%)" }} fontSize={9} fill="hsl(142, 70%, 45%)">
-                {m24.sectors.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
-              </Pie>
-              <Tooltip contentStyle={TOOLTIP_STYLE} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        
 
-
-
-
-
-
-
-
-
-
-      </div>
 
       {/* All IPOs 3M Return Waterfall */}
       <div className="rounded-lg border border-border bg-card p-4">

@@ -191,8 +191,8 @@ const SummaryTab = () => {
               <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => [`${v}%`]} />
               <ReferenceLine y={0} stroke="hsl(220, 15%, 25%)" />
               <Legend wrapperStyle={{ color: "hsl(215, 12%, 50%)" }} />
-              <Bar dataKey="2024" fill="hsl(142, 70%, 45%)" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="2025" fill="hsl(0, 72%, 51%)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="2024" fill="hsl(210, 80%, 55%)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="2025" fill="hsl(270, 60%, 55%)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -205,8 +205,8 @@ const SummaryTab = () => {
               <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => [`${v}%`]} />
               <ReferenceLine y={50} stroke="hsl(35, 90%, 55%)" strokeDasharray="4 4" label={{ value: "50%", fill: "hsl(35, 90%, 55%)", fontSize: 10 }} />
               <Legend wrapperStyle={{ color: "hsl(215, 12%, 50%)" }} />
-              <Bar dataKey="2024" fill="hsl(35, 90%, 55%)" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="2025" fill="hsl(210, 80%, 55%)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="2024" fill="hsl(210, 80%, 55%)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="2025" fill="hsl(270, 60%, 55%)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -241,7 +241,7 @@ const SummaryTab = () => {
       {/* All IPOs 3M Return Waterfall */}
       <div className="rounded-lg border border-border bg-card p-4">
         <h3 className="text-sm font-medium text-muted-foreground mb-1">All IPOs — 3M Return Ranked</h3>
-        <p className="text-xs text-muted-foreground mb-4">Green = 2024, Blue = 2025</p>
+        <p className="text-xs text-muted-foreground mb-4">Blue = 2024, Purple = 2025</p>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={returnComparisonData}>
             <XAxis dataKey="name" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 8 }} angle={-40} textAnchor="end" height={70} />
@@ -250,7 +250,7 @@ const SummaryTab = () => {
             <ReferenceLine y={0} stroke="hsl(220, 15%, 25%)" />
             <Bar dataKey="return3M" radius={[3, 3, 0, 0]}>
               {returnComparisonData.map((d, i) =>
-              <Cell key={i} fill={d.year === 2024 ? "hsl(142, 70%, 45%)" : "hsl(210, 80%, 55%)"} opacity={0.85} />
+              <Cell key={i} fill={d.year === 2024 ? "hsl(210, 80%, 55%)" : "hsl(270, 60%, 55%)"} opacity={0.85} />
               )}
             </Bar>
           </BarChart>

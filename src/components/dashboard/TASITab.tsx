@@ -14,7 +14,7 @@ const volumeData = tasiData.slice(-20).map(d => ({
   volume: d.volume / 1e6,
 }));
 
-const TOOLTIP_STYLE = { background: "hsl(220, 18%, 10%)", border: "1px solid hsl(220, 15%, 18%)", borderRadius: 8, color: "hsl(210, 20%, 92%)" };
+const TOOLTIP_STYLE = { background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" };
 
 // IPO Return vs TASI Return scatter data (3M)
 const scatterData = ipoPerformance
@@ -107,8 +107,8 @@ const TASITab = () => {
                 <stop offset="95%" stopColor="hsl(210, 80%, 55%)" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis dataKey="date" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 10 }} interval={8} />
-            <YAxis domain={["dataMin - 200", "dataMax + 200"]} tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => v.toLocaleString()} />
+            <XAxis dataKey="date" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 10 }} interval={8} />
+            <YAxis domain={["dataMin - 200", "dataMax + 200"]} tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => v.toLocaleString()} />
             <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => [v.toLocaleString(), "Close"]} />
             <Area type="monotone" dataKey="close" stroke="hsl(210, 80%, 55%)" fill="url(#tasiGrad)" strokeWidth={2} dot={false} />
           </AreaChart>
@@ -120,10 +120,10 @@ const TASITab = () => {
         <h3 className="text-sm font-medium text-muted-foreground mb-4">Trading Volume (Last 20 Sessions, Mn shares)</h3>
         <ResponsiveContainer width="100%" height={180}>
           <BarChart data={volumeData}>
-            <XAxis dataKey="date" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 10 }} />
-            <YAxis tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} />
+            <XAxis dataKey="date" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 10 }} />
+            <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} />
             <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => [`${v.toFixed(0)}M`, "Volume"]} />
-            <Bar dataKey="volume" fill="hsl(215, 12%, 50%)" radius={[3, 3, 0, 0]} opacity={0.7} />
+            <Bar dataKey="volume" fill="hsl(220, 10%, 45%)" radius={[3, 3, 0, 0]} opacity={0.7} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -172,11 +172,11 @@ const TASITab = () => {
         <p className="text-xs text-muted-foreground mb-4">Blue = IPO Return, Purple = TASI Return over the same 3-month window</p>
         <ResponsiveContainer width="100%" height={320}>
           <BarChart data={pairedReturnData}>
-            <XAxis dataKey="name" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 8 }} angle={-40} textAnchor="end" height={70} />
-            <YAxis tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
+            <XAxis dataKey="name" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 8 }} angle={-40} textAnchor="end" height={70} />
+            <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
             <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number, name: string) => [`${v}%`, name === "ipoReturn" ? "IPO Return" : "TASI Return"]} />
-            <ReferenceLine y={0} stroke="hsl(220, 15%, 25%)" />
-            <Legend wrapperStyle={{ color: "hsl(215, 12%, 50%)" }} formatter={(value) => value === "ipoReturn" ? "IPO Return" : "TASI Return"} />
+            <ReferenceLine y={0} stroke="hsl(40, 15%, 80%)" />
+            <Legend wrapperStyle={{ color: "hsl(220, 10%, 45%)" }} formatter={(value) => value === "ipoReturn" ? "IPO Return" : "TASI Return"} />
             <Bar dataKey="ipoReturn" fill="hsl(210, 80%, 55%)" radius={[3, 3, 0, 0]} />
             <Bar dataKey="tasiReturn" fill="hsl(270, 60%, 55%)" radius={[3, 3, 0, 0]} />
           </BarChart>
@@ -189,10 +189,10 @@ const TASITab = () => {
         <p className="text-xs text-muted-foreground mb-4">Positive = outperformed TASI, Negative = underperformed</p>
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={abnormalData}>
-            <XAxis dataKey="name" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 8 }} angle={-40} textAnchor="end" height={70} />
-            <YAxis tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
+            <XAxis dataKey="name" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 8 }} angle={-40} textAnchor="end" height={70} />
+            <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
             <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => [`${v}%`, "Abnormal Return"]} />
-            <ReferenceLine y={0} stroke="hsl(220, 15%, 25%)" />
+            <ReferenceLine y={0} stroke="hsl(40, 15%, 80%)" />
             <Bar dataKey="abnormal3M" radius={[3, 3, 0, 0]}>
               {abnormalData.map((d, i) => (
                 <Cell key={i} fill={d.abnormal3M >= 0 ? "hsl(142, 70%, 45%)" : "hsl(0, 72%, 51%)"} opacity={0.85} />
@@ -208,14 +208,14 @@ const TASITab = () => {
         <p className="text-xs text-muted-foreground mb-4">Points above the diagonal outperformed TASI. Blue = 2024, Purple = 2025</p>
         <ResponsiveContainer width="100%" height={320}>
           <ScatterChart>
-            <CartesianGrid stroke="hsl(220, 15%, 15%)" strokeDasharray="3 3" />
-            <XAxis type="number" dataKey="tasiReturn" name="TASI Return" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} label={{ value: "TASI 3M Return %", position: "insideBottom", offset: -5, fill: "hsl(215, 12%, 50%)", fontSize: 11 }} />
-            <YAxis type="number" dataKey="ipoReturn" name="IPO Return" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} label={{ value: "IPO 3M Return %", angle: -90, position: "insideLeft", fill: "hsl(215, 12%, 50%)", fontSize: 11 }} />
+            <CartesianGrid stroke="hsl(40, 15%, 88%)" strokeDasharray="3 3" />
+            <XAxis type="number" dataKey="tasiReturn" name="TASI Return" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} label={{ value: "TASI 3M Return %", position: "insideBottom", offset: -5, fill: "hsl(220, 10%, 45%)", fontSize: 11 }} />
+            <YAxis type="number" dataKey="ipoReturn" name="IPO Return" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} label={{ value: "IPO 3M Return %", angle: -90, position: "insideLeft", fill: "hsl(220, 10%, 45%)", fontSize: 11 }} />
             <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number, name: string) => [`${v}%`, name]} labelFormatter={() => ""} />
-            <ReferenceLine segment={[{ x: -50, y: -50 }, { x: 50, y: 50 }]} stroke="hsl(35, 90%, 55%)" strokeDasharray="5 5" ifOverflow="extendDomain" />
-            <Scatter name="2024 IPOs" data={scatterData.filter(d => d.year === 2024)} fill="hsl(210, 80%, 55%)" />
+            <ReferenceLine segment={[{ x: -50, y: -50 }, { x: 50, y: 50 }]} stroke="hsl(35, 85%, 50%)" strokeDasharray="5 5" ifOverflow="extendDomain" />
+            <Scatter name="2024 IPOs" data={scatterData.filter(d => d.year === 2024)} fill="hsl(210, 80%, 45%)" />
             <Scatter name="2025 IPOs" data={scatterData.filter(d => d.year === 2025)} fill="hsl(270, 60%, 55%)" />
-            <Legend wrapperStyle={{ color: "hsl(215, 12%, 50%)" }} />
+            <Legend wrapperStyle={{ color: "hsl(220, 10%, 45%)" }} />
           </ScatterChart>
         </ResponsiveContainer>
       </div>

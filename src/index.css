@@ -6,49 +6,49 @@
 
 @layer base {
   :root {
-    --background: 220 20% 7%;
-    --foreground: 210 20% 92%;
+    --background: 40 30% 96%;
+    --foreground: 220 20% 12%;
 
-    --card: 220 18% 10%;
-    --card-foreground: 210 20% 92%;
+    --card: 40 25% 99%;
+    --card-foreground: 220 20% 12%;
 
-    --popover: 220 18% 10%;
-    --popover-foreground: 210 20% 92%;
+    --popover: 40 25% 99%;
+    --popover-foreground: 220 20% 12%;
 
-    --primary: 142 70% 45%;
-    --primary-foreground: 220 20% 7%;
+    --primary: 142 55% 35%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 15% 16%;
-    --secondary-foreground: 210 15% 75%;
+    --secondary: 40 15% 90%;
+    --secondary-foreground: 220 15% 35%;
 
-    --muted: 220 15% 14%;
-    --muted-foreground: 215 12% 50%;
+    --muted: 40 15% 92%;
+    --muted-foreground: 220 10% 45%;
 
-    --accent: 35 90% 55%;
-    --accent-foreground: 220 20% 7%;
+    --accent: 35 85% 50%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 18%;
-    --input: 220 15% 18%;
-    --ring: 142 70% 45%;
+    --border: 40 15% 85%;
+    --input: 40 15% 85%;
+    --ring: 142 55% 35%;
 
     --radius: 0.5rem;
 
-    --chart-up: 142 70% 45%;
+    --chart-up: 142 55% 35%;
     --chart-down: 0 72% 51%;
-    --chart-neutral: 35 90% 55%;
-    --chart-line: 210 80% 55%;
+    --chart-neutral: 35 85% 50%;
+    --chart-line: 210 80% 45%;
 
-    --sidebar-background: 220 18% 10%;
-    --sidebar-foreground: 210 20% 92%;
-    --sidebar-primary: 142 70% 45%;
-    --sidebar-primary-foreground: 220 20% 7%;
-    --sidebar-accent: 220 15% 16%;
-    --sidebar-accent-foreground: 210 15% 75%;
-    --sidebar-border: 220 15% 18%;
-    --sidebar-ring: 142 70% 45%;
+    --sidebar-background: 40 25% 99%;
+    --sidebar-foreground: 220 20% 12%;
+    --sidebar-primary: 142 55% 35%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 15% 90%;
+    --sidebar-accent-foreground: 220 15% 35%;
+    --sidebar-border: 40 15% 85%;
+    --sidebar-ring: 142 55% 35%;
   }
 }
 
@@ -90,6 +90,6 @@
     color: hsl(var(--chart-neutral));
   }
   .glow-primary {
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.15);
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.1);
   }
 }

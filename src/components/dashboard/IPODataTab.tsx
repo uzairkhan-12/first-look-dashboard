@@ -57,9 +57,9 @@ const IPODataTab = () => {
           <h3 className="text-sm font-medium text-muted-foreground mb-4">IPOs by Size Bucket</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={sizeChartData}>
-              <XAxis dataKey="bucket" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} />
-              <YAxis tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} />
-              <Tooltip contentStyle={{ background: "hsl(220, 18%, 10%)", border: "1px solid hsl(220, 15%, 18%)", borderRadius: 8, color: "hsl(210, 20%, 92%)" }} />
+              <XAxis dataKey="bucket" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} />
+              <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} />
+              <Tooltip contentStyle={{ background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" }} />
               <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                 {sizeChartData.map((_, i) => (
                   <Cell key={i} fill={COLORS[i % COLORS.length]} />
@@ -72,10 +72,10 @@ const IPODataTab = () => {
           <h3 className="text-sm font-medium text-muted-foreground mb-4">IPOs by Sector (Top 8)</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={sectorData} layout="vertical">
-              <XAxis type="number" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} />
-              <YAxis dataKey="sector" type="category" width={130} tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 10 }} />
-              <Tooltip contentStyle={{ background: "hsl(220, 18%, 10%)", border: "1px solid hsl(220, 15%, 18%)", borderRadius: 8, color: "hsl(210, 20%, 92%)" }} />
-              <Bar dataKey="count" fill="hsl(142, 70%, 45%)" radius={[0, 4, 4, 0]} />
+              <XAxis type="number" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} />
+              <YAxis dataKey="sector" type="category" width={130} tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 10 }} />
+              <Tooltip contentStyle={{ background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" }} />
+              <Bar dataKey="count" fill="hsl(142, 55%, 35%)" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

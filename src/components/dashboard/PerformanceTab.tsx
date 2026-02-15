@@ -58,10 +58,10 @@ const PerformanceTab = () => {
         <h3 className="text-sm font-medium text-muted-foreground mb-4">3M Abnormal Return by IPO</h3>
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={chartData}>
-            <XAxis dataKey="name" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 9 }} angle={-35} textAnchor="end" height={60} />
-            <YAxis tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
-            <Tooltip contentStyle={{ background: "hsl(220, 18%, 10%)", border: "1px solid hsl(220, 15%, 18%)", borderRadius: 8, color: "hsl(210, 20%, 92%)" }} formatter={(v: number) => [`${v}%`, "Abnormal Return"]} />
-            <ReferenceLine y={0} stroke="hsl(220, 15%, 25%)" />
+            <XAxis dataKey="name" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 9 }} angle={-35} textAnchor="end" height={60} />
+            <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
+            <Tooltip contentStyle={{ background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" }} formatter={(v: number) => [`${v}%`, "Abnormal Return"]} />
+            <ReferenceLine y={0} stroke="hsl(40, 15%, 80%)" />
             <Bar dataKey="abnormal3M" radius={[4, 4, 0, 0]}>
               {chartData.map((d, i) => (
                 <Cell key={i} fill={d.abnormal3M >= 0 ? "hsl(142, 70%, 45%)" : "hsl(0, 72%, 51%)"} />

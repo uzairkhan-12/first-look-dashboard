@@ -13,7 +13,7 @@ const underperformData = [
 { horizon: "9M", "2024": summaryStats.find((s) => s.horizon === "9M" && s.listingYear === 2024)!.underperformRate, "2025": summaryStats.find((s) => s.horizon === "9M" && s.listingYear === 2025)!.underperformRate }];
 
 
-const TOOLTIP_STYLE = { background: "hsl(220, 18%, 10%)", border: "1px solid hsl(220, 15%, 18%)", borderRadius: 8, color: "hsl(210, 20%, 92%)" };
+const TOOLTIP_STYLE = { background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" };
 const PIE_COLORS = ["hsl(142, 70%, 45%)", "hsl(0, 72%, 51%)", "hsl(35, 90%, 55%)", "hsl(210, 80%, 55%)", "hsl(270, 60%, 55%)"];
 
 // Year-level aggregations
@@ -190,11 +190,11 @@ const SummaryTab = () => {
           <h3 className="text-sm font-medium text-muted-foreground mb-4">Median Abnormal Return: 2024 vs 2025</h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={chartData}>
-              <XAxis dataKey="horizon" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 12 }} />
-              <YAxis tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
+              <XAxis dataKey="horizon" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 12 }} />
+              <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
               <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => [`${v}%`]} />
-              <ReferenceLine y={0} stroke="hsl(220, 15%, 25%)" />
-              <Legend wrapperStyle={{ color: "hsl(215, 12%, 50%)" }} />
+              <ReferenceLine y={0} stroke="hsl(40, 15%, 80%)" />
+              <Legend wrapperStyle={{ color: "hsl(220, 10%, 45%)" }} />
               <Bar dataKey="2024" fill="hsl(210, 80%, 55%)" radius={[4, 4, 0, 0]} />
               <Bar dataKey="2025" fill="hsl(270, 60%, 55%)" radius={[4, 4, 0, 0]} />
             </BarChart>
@@ -204,12 +204,12 @@ const SummaryTab = () => {
           <h3 className="text-sm font-medium text-muted-foreground mb-4">Underperformance Rate: 2024 vs 2025</h3>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={underperformData}>
-              <XAxis dataKey="horizon" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 12 }} />
-              <YAxis tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} domain={[0, 100]} />
+              <XAxis dataKey="horizon" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 12 }} />
+              <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} domain={[0, 100]} />
               <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => [`${v}%`]} />
-              <ReferenceLine y={50} stroke="hsl(35, 90%, 55%)" strokeDasharray="4 4" label={{ value: "50%", fill: "hsl(35, 90%, 55%)", fontSize: 10 }} />
-              <Legend wrapperStyle={{ color: "hsl(215, 12%, 50%)" }} />
-              <Bar dataKey="2024" fill="hsl(210, 80%, 55%)" radius={[4, 4, 0, 0]} />
+              <ReferenceLine y={50} stroke="hsl(35, 85%, 50%)" strokeDasharray="4 4" label={{ value: "50%", fill: "hsl(35, 85%, 50%)", fontSize: 10 }} />
+              <Legend wrapperStyle={{ color: "hsl(220, 10%, 45%)" }} />
+              <Bar dataKey="2024" fill="hsl(210, 80%, 45%)" radius={[4, 4, 0, 0]} />
               <Bar dataKey="2025" fill="hsl(270, 60%, 55%)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -224,13 +224,13 @@ const SummaryTab = () => {
         <p className="text-xs text-muted-foreground mb-4">Blue = 2024, Purple = 2025</p>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={returnComparisonData}>
-            <XAxis dataKey="name" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 8 }} angle={-40} textAnchor="end" height={70} />
-            <YAxis tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
+            <XAxis dataKey="name" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 8 }} angle={-40} textAnchor="end" height={70} />
+            <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
             <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => [`${v}%`, "3M Return"]} />
-            <ReferenceLine y={0} stroke="hsl(220, 15%, 25%)" />
+            <ReferenceLine y={0} stroke="hsl(40, 15%, 80%)" />
             <Bar dataKey="return3M" radius={[3, 3, 0, 0]}>
               {returnComparisonData.map((d, i) =>
-              <Cell key={i} fill={d.year === 2024 ? "hsl(210, 80%, 55%)" : "hsl(270, 60%, 55%)"} opacity={0.85} />
+              <Cell key={i} fill={d.year === 2024 ? "hsl(210, 80%, 45%)" : "hsl(270, 60%, 55%)"} opacity={0.85} />
               )}
             </Bar>
           </BarChart>

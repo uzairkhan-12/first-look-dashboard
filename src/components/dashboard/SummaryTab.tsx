@@ -146,8 +146,8 @@ const SummaryTab = () => {
             <div className="flex justify-between mb-2">
               <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Metric</span>
               <div className="flex gap-6">
-                <span className="text-[10px] uppercase tracking-wider text-primary">2024</span>
-                <span className="text-[10px] uppercase tracking-wider text-accent">2025</span>
+                <span className="text-[10px] uppercase tracking-wider text-chart-line">2024</span>
+                <span className="text-[10px] uppercase tracking-wider" style={{ color: "hsl(270, 60%, 55%)" }}>2025</span>
               </div>
             </div>
             <MetricRow label="IPO Count" val2024={`${m24.count}`} val2025={`${m25.count}`} />
@@ -161,8 +161,8 @@ const SummaryTab = () => {
             <div className="flex justify-between mb-2">
               <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Coverage</span>
               <div className="flex gap-6">
-                <span className="text-[10px] uppercase tracking-wider text-primary">2024</span>
-                <span className="text-[10px] uppercase tracking-wider text-accent">2025</span>
+                <span className="text-[10px] uppercase tracking-wider text-chart-line">2024</span>
+                <span className="text-[10px] uppercase tracking-wider" style={{ color: "hsl(270, 60%, 55%)" }}>2025</span>
               </div>
             </div>
             <MetricRow label="Avg Retail Coverage" val2024={`${m24.avgRetailCov.toFixed(1)}x`} val2025={`${m25.avgRetailCov.toFixed(1)}x`} better={m24.avgRetailCov > m25.avgRetailCov ? "2024" : "2025"} />

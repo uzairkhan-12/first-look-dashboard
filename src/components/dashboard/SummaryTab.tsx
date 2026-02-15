@@ -1,5 +1,5 @@
-import { summaryStats } from "@/data/ipoData";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { ipoData, ipoPerformance, summaryStats } from "@/data/ipoData";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell, RadialBarChart, RadialBar, ReferenceLine } from "recharts";
 
 const chartData = [
   { horizon: "3M", "2024": summaryStats.find(s => s.horizon === "3M" && s.listingYear === 2024)!.medianAbnormalReturn, "2025": summaryStats.find(s => s.horizon === "3M" && s.listingYear === 2025)!.medianAbnormalReturn },
@@ -13,10 +13,96 @@ const underperformData = [
   { horizon: "9M", "2024": summaryStats.find(s => s.horizon === "9M" && s.listingYear === 2024)!.underperformRate, "2025": summaryStats.find(s => s.horizon === "9M" && s.listingYear === 2025)!.underperformRate },
 ];
 
+const TOOLTIP_STYLE = { background: "hsl(220, 18%, 10%)", border: "1px solid hsl(220, 15%, 18%)", borderRadius: 8, color: "hsl(210, 20%, 92%)" };
+const PIE_COLORS = ["hsl(142, 70%, 45%)", "hsl(0, 72%, 51%)", "hsl(35, 90%, 55%)", "hsl(210, 80%, 55%)", "hsl(270, 60%, 55%)"];
+
+// Year-level aggregations
+const getYearMetrics = (year: number) => {
+  const ipos = ipoData.filter(d => d.year === year);
+  const perfs = ipoPerformance.filter(d => d.year === year);
+  const totalSize = ipos.reduce((s, d) => s + d.totalOfferSize, 0);
+  const avgOfferPrice = ipos.reduce((s, d) => s + d.offerPrice, 0) / ipos.length;
+  const avgRetailCov = ipos.reduce((s, d) => s + d.retailCoverageMultiple, 0) / ipos.length;
+  const avgInstCov = ipos.reduce((s, d) => s + d.institutionalCoverageMultiple, 0) / ipos.length;
+  const medianOfferSize = [...ipos].sort((a, b) => a.totalOfferSize - b.totalOfferSize)[Math.floor(ipos.length / 2)].totalOfferSize;
+  const perfs3M = perfs.filter(d => d.return3M !== null);
+  const avgReturn3M = perfs3M.length ? perfs3M.reduce((s, d) => s + d.return3M!, 0) / perfs3M.length : 0;
+  const positiveReturns3M = perfs3M.filter(d => d.return3M! > 0).length;
+  const bestPerformer = perfs3M.length ? perfs3M.reduce((best, d) => (d.return3M! > (best.return3M ?? -Infinity) ? d : best), perfs3M[0]) : null;
+  const worstPerformer = perfs3M.length ? perfs3M.reduce((worst, d) => (d.return3M! < (worst.return3M ?? Infinity) ? d : worst), perfs3M[0]) : null;
+
+  // Sector distribution
+  const sectors = ipos.reduce((acc, d) => {
+    const s = d.sector.length > 18 ? d.sector.substring(0, 16) + "…" : d.sector;
+    const ex = acc.find(x => x.sector === s);
+    if (ex) ex.count++;
+    else acc.push({ sector: s, count: 1 });
+    return acc;
+  }, [] as { sector: string; count: number }[]).sort((a, b) => b.count - a.count);
+
+  // Size bucket distribution
+  const buckets = ipos.reduce((acc, d) => {
+    const ex = acc.find(x => x.bucket === d.ipoSizeBucket);
+    if (ex) ex.count++;
+    else acc.push({ bucket: d.ipoSizeBucket, count: 1 });
+    return acc;
+  }, [] as { bucket: string; count: number }[]);
+
+  return {
+    count: ipos.length,
+    totalSize,
+    avgOfferPrice,
+    avgRetailCov,
+    avgInstCov,
+    medianOfferSize,
+    avgReturn3M,
+    positiveReturns3M,
+    bestPerformer,
+    worstPerformer,
+    sectors,
+    buckets,
+  };
+};
+
+const m24 = getYearMetrics(2024);
+const m25 = getYearMetrics(2025);
+
+// Comparison bar data
+const comparisonData = [
+  { metric: "Total Size (Bn)", "2024": +(m24.totalSize / 1000).toFixed(1), "2025": +(m25.totalSize / 1000).toFixed(1) },
+  { metric: "Avg Price (SAR)", "2024": +m24.avgOfferPrice.toFixed(0), "2025": +m25.avgOfferPrice.toFixed(0) },
+  { metric: "Med. Size (Mn)", "2024": +m24.medianOfferSize.toFixed(0), "2025": +m25.medianOfferSize.toFixed(0) },
+];
+
+const coverageComparison = [
+  { metric: "Retail Cov.", "2024": +m24.avgRetailCov.toFixed(1), "2025": +m25.avgRetailCov.toFixed(1) },
+  { metric: "Inst. Cov.", "2024": +m24.avgInstCov.toFixed(1), "2025": +m25.avgInstCov.toFixed(1) },
+];
+
+// Individual IPO return comparison chart
+const returnComparisonData = ipoPerformance
+  .filter(d => d.return3M !== null)
+  .map(d => ({
+    name: d.name.length > 10 ? d.name.substring(0, 8) + "…" : d.name,
+    return3M: d.return3M!,
+    year: d.year,
+  }))
+  .sort((a, b) => b.return3M - a.return3M);
+
+const MetricRow = ({ label, val2024, val2025, suffix = "", better }: { label: string; val2024: string; val2025: string; suffix?: string; better?: "2024" | "2025" | null }) => (
+  <div className="flex items-center justify-between py-2.5 border-b border-border/50">
+    <span className="text-xs text-muted-foreground">{label}</span>
+    <div className="flex gap-6">
+      <span className={`font-mono text-sm ${better === "2024" ? "text-up font-bold" : "text-foreground"}`}>{val2024}{suffix}</span>
+      <span className={`font-mono text-sm ${better === "2025" ? "text-up font-bold" : "text-foreground"}`}>{val2025}{suffix}</span>
+    </div>
+  </div>
+);
+
 const SummaryTab = () => {
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Summary Cards */}
+      {/* Year Cohort Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {[2024, 2025].map(year => {
           const stats = summaryStats.filter(s => s.listingYear === year);
@@ -51,7 +137,50 @@ const SummaryTab = () => {
         })}
       </div>
 
-      {/* Comparison Charts */}
+      {/* Head-to-Head Comparison */}
+      <div className="rounded-lg border border-border bg-card p-5">
+        <h3 className="text-sm font-semibold text-foreground mb-1">Head-to-Head: 2024 vs 2025</h3>
+        <p className="text-xs text-muted-foreground mb-4">Key IPO market metrics side by side</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <div className="flex justify-between mb-2">
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Metric</span>
+              <div className="flex gap-6">
+                <span className="text-[10px] uppercase tracking-wider text-primary">2024</span>
+                <span className="text-[10px] uppercase tracking-wider text-accent">2025</span>
+              </div>
+            </div>
+            <MetricRow label="IPO Count" val2024={`${m24.count}`} val2025={`${m25.count}`} />
+            <MetricRow label="Total Offer Size" val2024={`${(m24.totalSize / 1000).toFixed(1)}B`} val2025={`${(m25.totalSize / 1000).toFixed(1)}B`} better={m24.totalSize > m25.totalSize ? "2024" : "2025"} />
+            <MetricRow label="Median Offer Size" val2024={`${m24.medianOfferSize.toFixed(0)}M`} val2025={`${m25.medianOfferSize.toFixed(0)}M`} />
+            <MetricRow label="Avg Offer Price" val2024={`${m24.avgOfferPrice.toFixed(0)}`} val2025={`${m25.avgOfferPrice.toFixed(0)}`} suffix=" SAR" />
+            <MetricRow label="Avg 3M Return" val2024={`${m24.avgReturn3M >= 0 ? "+" : ""}${m24.avgReturn3M.toFixed(1)}%`} val2025={`${m25.avgReturn3M >= 0 ? "+" : ""}${m25.avgReturn3M.toFixed(1)}%`} better={m24.avgReturn3M > m25.avgReturn3M ? "2024" : "2025"} />
+            <MetricRow label="Positive 3M Returns" val2024={`${m24.positiveReturns3M}/${m24.count}`} val2025={`${m25.positiveReturns3M}/${m25.count}`} better={m24.positiveReturns3M / m24.count > m25.positiveReturns3M / m25.count ? "2024" : "2025"} />
+          </div>
+          <div>
+            <div className="flex justify-between mb-2">
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Coverage</span>
+              <div className="flex gap-6">
+                <span className="text-[10px] uppercase tracking-wider text-primary">2024</span>
+                <span className="text-[10px] uppercase tracking-wider text-accent">2025</span>
+              </div>
+            </div>
+            <MetricRow label="Avg Retail Coverage" val2024={`${m24.avgRetailCov.toFixed(1)}x`} val2025={`${m25.avgRetailCov.toFixed(1)}x`} better={m24.avgRetailCov > m25.avgRetailCov ? "2024" : "2025"} />
+            <MetricRow label="Avg Inst. Coverage" val2024={`${m24.avgInstCov.toFixed(1)}x`} val2025={`${m25.avgInstCov.toFixed(1)}x`} better={m24.avgInstCov > m25.avgInstCov ? "2024" : "2025"} />
+            {m24.bestPerformer && <MetricRow label="Best Performer (3M)" val2024={`${m24.bestPerformer.name.substring(0, 12)} +${m24.bestPerformer.return3M}%`} val2025={m25.bestPerformer ? `${m25.bestPerformer.name.substring(0, 12)} ${m25.bestPerformer.return3M! > 0 ? "+" : ""}${m25.bestPerformer.return3M}%` : "—"} />}
+            {m24.worstPerformer && <MetricRow label="Worst Performer (3M)" val2024={`${m24.worstPerformer.name.substring(0, 12)} ${m24.worstPerformer.return3M}%`} val2025={m25.worstPerformer ? `${m25.worstPerformer.name.substring(0, 12)} ${m25.worstPerformer.return3M}%` : "—"} />}
+            <div className="mt-4 p-3 rounded-md bg-muted/30 border border-border/50">
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                <span className="text-accent font-semibold">Key Insight:</span> 2024 IPOs significantly outperformed 2025 across all horizons. 
+                The 2024 cohort had a {m24.positiveReturns3M}/{m24.count} positive 3M return rate vs {m25.positiveReturns3M}/{m25.count} for 2025, 
+                suggesting a notable shift in market conditions and investor sentiment.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Charts Row 1: Abnormal Returns + Underperformance */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="rounded-lg border border-border bg-card p-4">
           <h3 className="text-sm font-medium text-muted-foreground mb-4">Median Abnormal Return: 2024 vs 2025</h3>
@@ -59,7 +188,8 @@ const SummaryTab = () => {
             <BarChart data={chartData}>
               <XAxis dataKey="horizon" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 12 }} />
               <YAxis tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
-              <Tooltip contentStyle={{ background: "hsl(220, 18%, 10%)", border: "1px solid hsl(220, 15%, 18%)", borderRadius: 8, color: "hsl(210, 20%, 92%)" }} formatter={(v: number) => [`${v}%`]} />
+              <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => [`${v}%`]} />
+              <ReferenceLine y={0} stroke="hsl(220, 15%, 25%)" />
               <Legend wrapperStyle={{ color: "hsl(215, 12%, 50%)" }} />
               <Bar dataKey="2024" fill="hsl(142, 70%, 45%)" radius={[4, 4, 0, 0]} />
               <Bar dataKey="2025" fill="hsl(0, 72%, 51%)" radius={[4, 4, 0, 0]} />
@@ -71,14 +201,60 @@ const SummaryTab = () => {
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={underperformData}>
               <XAxis dataKey="horizon" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 12 }} />
-              <YAxis tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
-              <Tooltip contentStyle={{ background: "hsl(220, 18%, 10%)", border: "1px solid hsl(220, 15%, 18%)", borderRadius: 8, color: "hsl(210, 20%, 92%)" }} formatter={(v: number) => [`${v}%`]} />
+              <YAxis tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} domain={[0, 100]} />
+              <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => [`${v}%`]} />
+              <ReferenceLine y={50} stroke="hsl(35, 90%, 55%)" strokeDasharray="4 4" label={{ value: "50%", fill: "hsl(35, 90%, 55%)", fontSize: 10 }} />
               <Legend wrapperStyle={{ color: "hsl(215, 12%, 50%)" }} />
               <Bar dataKey="2024" fill="hsl(35, 90%, 55%)" radius={[4, 4, 0, 0]} />
               <Bar dataKey="2025" fill="hsl(210, 80%, 55%)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
+      </div>
+
+      {/* Charts Row 2: Sector + Size Bucket Comparison */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <h3 className="text-sm font-medium text-muted-foreground mb-4">Sector Distribution — 2024</h3>
+          <ResponsiveContainer width="100%" height={220}>
+            <PieChart>
+              <Pie data={m24.sectors} dataKey="count" nameKey="sector" cx="50%" cy="50%" outerRadius={85} label={({ sector, count }) => `${sector} (${count})`} labelLine={{ stroke: "hsl(215, 12%, 35%)" }} fontSize={9} fill="hsl(142, 70%, 45%)">
+                {m24.sectors.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+              </Pie>
+              <Tooltip contentStyle={TOOLTIP_STYLE} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <h3 className="text-sm font-medium text-muted-foreground mb-4">Sector Distribution — 2025</h3>
+          <ResponsiveContainer width="100%" height={220}>
+            <PieChart>
+              <Pie data={m25.sectors} dataKey="count" nameKey="sector" cx="50%" cy="50%" outerRadius={85} label={({ sector, count }) => `${sector} (${count})`} labelLine={{ stroke: "hsl(215, 12%, 35%)" }} fontSize={9} fill="hsl(210, 80%, 55%)">
+                {m25.sectors.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+              </Pie>
+              <Tooltip contentStyle={TOOLTIP_STYLE} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* All IPOs 3M Return Waterfall */}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <h3 className="text-sm font-medium text-muted-foreground mb-1">All IPOs — 3M Return Ranked</h3>
+        <p className="text-xs text-muted-foreground mb-4">Green = 2024, Blue = 2025</p>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={returnComparisonData}>
+            <XAxis dataKey="name" tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 8 }} angle={-40} textAnchor="end" height={70} />
+            <YAxis tick={{ fill: "hsl(215, 12%, 50%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
+            <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => [`${v}%`, "3M Return"]} />
+            <ReferenceLine y={0} stroke="hsl(220, 15%, 25%)" />
+            <Bar dataKey="return3M" radius={[3, 3, 0, 0]}>
+              {returnComparisonData.map((d, i) => (
+                <Cell key={i} fill={d.year === 2024 ? "hsl(142, 70%, 45%)" : "hsl(210, 80%, 55%)"} opacity={0.85} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
       </div>
 
       {/* Detail Table */}

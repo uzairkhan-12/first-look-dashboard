@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import kafdImage from "@/assets/kafd-riyadh.jpg";
 
 const insights = [
   {
@@ -110,13 +111,17 @@ const BrunswickInsightsTab = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Header */}
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
-        <CardHeader className="pb-3">
+      <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-transparent relative overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-[0.07]"
+          style={{ backgroundImage: `url(${kafdImage})` }}
+        />
+        <CardHeader className="pb-3 relative z-10">
           <CardTitle className="text-lg font-semibold text-foreground flex items-center gap-2">
             <span className="text-primary text-xl">◆</span> Brunswick Insights: IPO Communications Playbook
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative z-10">
           <p className="text-sm text-muted-foreground leading-relaxed">
             Practical communications recommendations for companies considering a Main Market IPO in Saudi Arabia, 
             derived from analysis of 25 IPOs across 2024–2025 including demand dynamics, aftermarket performance, 

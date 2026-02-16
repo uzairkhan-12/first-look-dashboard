@@ -117,12 +117,12 @@ const BrunswickInsightsTab = () => {
           style={{ backgroundImage: `url(${kafdImage})` }}
         />
         <CardHeader className="pb-3 relative z-10">
-          <CardTitle className="text-lg font-semibold text-foreground flex items-center gap-2">
-            <span className="text-primary text-xl">◆</span> Brunswick Insights: IPO Communications Playbook
+          <CardTitle className="text-lg font-semibold flex items-center gap-2" style={{ color: '#1C2B4A' }}>
+            <span className="text-xl" style={{ color: '#1C2B4A' }}>◆</span> Brunswick Insights: IPO Communications Playbook
           </CardTitle>
         </CardHeader>
         <CardContent className="relative z-10">
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm leading-relaxed font-medium" style={{ color: '#1C2B4A' }}>
             Practical communications recommendations for companies considering a Main Market IPO in Saudi Arabia, 
             derived from analysis of 25 IPOs across 2024–2025 including demand dynamics, aftermarket performance, 
             retail participation patterns, and market sentiment indicators.

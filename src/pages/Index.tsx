@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import IPODataTab from "@/components/dashboard/IPODataTab";
 import PerformanceTab from "@/components/dashboard/PerformanceTab";
@@ -8,8 +9,24 @@ import AftermarketTab from "@/components/dashboard/AftermarketTab";
 import SentimentTab from "@/components/dashboard/SentimentTab";
 import EngagementTab from "@/components/dashboard/EngagementTab";
 import RetailConfidenceIndexTab from "@/components/dashboard/RetailConfidenceIndexTab";
+import LockScreen from "@/components/LockScreen";
 
+const LOCK_CODE = "KSADB@2026";
 const Index = () => {
+  const [isUnlocked, setIsUnlocked] = useState(false);
+
+  const handleUnlock = (code: string) => {
+    const success = code === LOCK_CODE;
+    if (success) {
+      setIsUnlocked(true);
+    }
+    return success;
+  };
+
+  if (!isUnlocked) {
+    return <LockScreen onUnlock={handleUnlock} />;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}

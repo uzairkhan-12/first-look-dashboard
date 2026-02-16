@@ -9,6 +9,7 @@ import AftermarketTab from "@/components/dashboard/AftermarketTab";
 import SentimentTab from "@/components/dashboard/SentimentTab";
 import EngagementTab from "@/components/dashboard/EngagementTab";
 import RetailConfidenceIndexTab from "@/components/dashboard/RetailConfidenceIndexTab";
+import BrunswickInsightsTab from "@/components/dashboard/BrunswickInsightsTab";
 import LockScreen from "@/components/LockScreen";
 
 const LOCK_CODE = "KSADB@2026";
@@ -76,6 +77,9 @@ const Index = () => {
             <TabsTrigger value="summary" className="data-[state=active]:bg-card data-[state=active]:text-primary font-medium text-xs">
               Summary Stats
             </TabsTrigger>
+            <TabsTrigger value="insights" className="data-[state=active]:bg-card data-[state=active]:text-primary font-medium text-xs">
+              ◆ Brunswick Insights
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="confidence-index">
@@ -104,6 +108,9 @@ const Index = () => {
           </TabsContent>
           <TabsContent value="summary">
             <SummaryTab />
+          </TabsContent>
+          <TabsContent value="insights">
+            <BrunswickInsightsTab />
           </TabsContent>
         </Tabs>
       </main>

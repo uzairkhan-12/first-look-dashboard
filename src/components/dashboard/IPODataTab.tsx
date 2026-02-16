@@ -43,6 +43,19 @@ const instDemandData = [...ipoData]
   })
   .sort((a, b) => b.demand - a.demand);
 
+const combinedDemandData = [...ipoData]
+  .map(ipo => {
+    const perf = ipoPerformance.find(p => p.ticker === ipo.ticker);
+    const combinedMultiple = ipo.institutionalCoverageMultiple + ipo.retailCoverageMultiple;
+    return {
+      name: ipo.name.length > 14 ? ipo.name.substring(0, 12) + "…" : ipo.name,
+      combinedMultiple,
+      return3M: perf?.return3M ?? null,
+      year: ipo.year,
+    };
+  })
+  .sort((a, b) => b.combinedMultiple - a.combinedMultiple);
+
 const formatNum = (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1)}B` : `${n.toFixed(0)}M`;
 
 const IPODataTab = () => {
@@ -145,6 +158,43 @@ const IPODataTab = () => {
             <Bar yAxisId="left" dataKey="demand" radius={[4, 4, 0, 0]}>
               <LabelList dataKey="coverage" position="top" formatter={(v: number) => `${v}x`} style={{ fill: "hsl(220, 10%, 45%)", fontSize: 9, fontWeight: 500 }} />
               {instDemandData.map((entry, i) => (
+                <Cell key={i} fill={entry.year === 2025 ? "hsl(270, 60%, 55%)" : "hsl(210, 80%, 55%)"} />
+              ))}
+            </Bar>
+            <Line yAxisId="right" type="monotone" dataKey="return3M" stroke="hsl(220, 10%, 70%)" strokeWidth={2} dot={(props: any) => {
+              const { cx, cy, payload } = props;
+              if (payload.return3M == null) return null;
+              const color = payload.return3M >= 0 ? "hsl(142, 70%, 45%)" : "hsl(0, 72%, 51%)";
+              return <circle cx={cx} cy={cy} r={4} fill={color} stroke={color} />;
+            }} connectNulls />
+          </ComposedChart>
+        </ResponsiveContainer>
+        <div className="flex items-center gap-4 mt-2 justify-center text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(210, 80%, 55%)" }} /> 2024</span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(270, 60%, 55%)" }} /> 2025</span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-0.5 rounded" style={{ background: "hsl(220, 10%, 70%)" }} /> 3M Return</span>
+        </div>
+      </div>
+
+      {/* Combined Normalized Demand */}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <h3 className="text-sm font-medium text-muted-foreground mb-4">Combined Normalized Demand (Inst. + Retail Coverage Multiple)</h3>
+        <ResponsiveContainer width="100%" height={380}>
+          <ComposedChart data={combinedDemandData} margin={{ bottom: 60, right: 10 }}>
+            <XAxis dataKey="name" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 10 }} angle={-45} textAnchor="end" interval={0} />
+            <YAxis yAxisId="left" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}x`} />
+            <YAxis yAxisId="right" orientation="right" tick={{ fill: "hsl(220, 10%, 55%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} label={{ value: "3M Return", angle: 90, position: "insideRight", style: { fill: "hsl(220, 10%, 55%)", fontSize: 11 }, dx: -5 }} />
+            <ReferenceLine yAxisId="right" y={0} stroke="hsl(220, 10%, 70%)" strokeDasharray="3 3" />
+            <Tooltip
+              contentStyle={{ background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" }}
+              formatter={(value: number, name: string) => {
+                if (name === "return3M") return [`${value}%`, "3M Return"];
+                return [`${value.toFixed(1)}x`, "Combined Multiple"];
+              }}
+            />
+            <Bar yAxisId="left" dataKey="combinedMultiple" radius={[4, 4, 0, 0]}>
+              <LabelList dataKey="combinedMultiple" position="top" formatter={(v: number) => `${v.toFixed(0)}x`} style={{ fill: "hsl(220, 10%, 45%)", fontSize: 9, fontWeight: 500 }} />
+              {combinedDemandData.map((entry, i) => (
                 <Cell key={i} fill={entry.year === 2025 ? "hsl(270, 60%, 55%)" : "hsl(210, 80%, 55%)"} />
               ))}
             </Bar>

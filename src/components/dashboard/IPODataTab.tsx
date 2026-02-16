@@ -22,6 +22,14 @@ const sectorData = ipoData.reduce((acc, ipo) => {
 
 const COLORS = ["hsl(142, 70%, 45%)", "hsl(35, 90%, 55%)", "hsl(210, 80%, 55%)", "hsl(0, 72%, 51%)", "hsl(270, 60%, 55%)"];
 
+const amountRaisedData = [...ipoData]
+  .sort((a, b) => b.totalOfferSize - a.totalOfferSize)
+  .map(ipo => ({
+    name: ipo.name.length > 14 ? ipo.name.substring(0, 12) + "…" : ipo.name,
+    amount: ipo.totalOfferSize,
+    year: ipo.year,
+  }));
+
 const formatNum = (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1)}B` : `${n.toFixed(0)}M`;
 
 const IPODataTab = () => {
@@ -78,6 +86,30 @@ const IPODataTab = () => {
               <Bar dataKey="count" fill="hsl(142, 55%, 35%)" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Amount Raised by IPO */}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <h3 className="text-sm font-medium text-muted-foreground mb-4">Total Amount Raised by IPO (SAR Mn)</h3>
+        <ResponsiveContainer width="100%" height={340}>
+          <BarChart data={amountRaisedData} margin={{ bottom: 60 }}>
+            <XAxis dataKey="name" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 10 }} angle={-45} textAnchor="end" interval={0} />
+            <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => formatNum(v)} />
+            <Tooltip
+              contentStyle={{ background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" }}
+              formatter={(value: number) => [`${value.toLocaleString()} Mn`, "Offer Size"]}
+            />
+            <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
+              {amountRaisedData.map((entry, i) => (
+                <Cell key={i} fill={entry.year === 2025 ? "hsl(142, 70%, 45%)" : "hsl(210, 80%, 55%)"} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+        <div className="flex items-center gap-4 mt-2 justify-center text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(210, 80%, 55%)" }} /> 2024</span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(142, 70%, 45%)" }} /> 2025</span>
         </div>
       </div>
 

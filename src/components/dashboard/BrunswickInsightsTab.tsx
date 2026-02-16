@@ -113,7 +113,7 @@ const BrunswickInsightsTab = () => {
       {/* Header */}
       <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-transparent relative overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-[0.07]"
+          className="absolute inset-0 bg-cover bg-center opacity-[0.18]"
           style={{ backgroundImage: `url(${kafdImage})` }}
         />
         <CardHeader className="pb-3 relative z-10">

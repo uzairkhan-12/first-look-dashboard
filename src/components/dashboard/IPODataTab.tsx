@@ -133,7 +133,7 @@ const IPODataTab = () => {
           <ComposedChart data={instDemandData} margin={{ bottom: 60, right: 10 }}>
             <XAxis dataKey="name" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 10 }} angle={-45} textAnchor="end" interval={0} />
             <YAxis yAxisId="left" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => formatNum(v)} />
-            <YAxis yAxisId="right" orientation="right" tick={{ fill: "hsl(220, 10%, 55%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} label={{ value: "3M Return", angle: 90, position: "insideRight", style: { fill: "hsl(220, 10%, 55%)", fontSize: 11 }, dx: 15 }} />
+            <YAxis yAxisId="right" orientation="right" tick={{ fill: "hsl(220, 10%, 55%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} label={{ value: "3M Return", angle: 90, position: "insideRight", style: { fill: "hsl(220, 10%, 55%)", fontSize: 11 }, dx: -5 }} />
             <ReferenceLine yAxisId="right" y={0} stroke="hsl(220, 10%, 70%)" strokeDasharray="3 3" />
             <Tooltip
               contentStyle={{ background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" }}

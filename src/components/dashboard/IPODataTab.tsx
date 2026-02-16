@@ -145,14 +145,14 @@ const IPODataTab = () => {
             <Bar yAxisId="left" dataKey="demand" radius={[4, 4, 0, 0]}>
               <LabelList dataKey="coverage" position="top" formatter={(v: number) => `${v}x`} style={{ fill: "hsl(220, 10%, 45%)", fontSize: 9, fontWeight: 500 }} />
               {instDemandData.map((entry, i) => (
-                <Cell key={i} fill={entry.year === 2025 ? "hsl(270, 60%, 55%)" : "hsl(35, 90%, 55%)"} />
+                <Cell key={i} fill={entry.year === 2025 ? "hsl(270, 60%, 55%)" : "hsl(210, 80%, 55%)"} />
               ))}
             </Bar>
             <Line yAxisId="right" type="monotone" dataKey="return3M" stroke="hsl(0, 72%, 51%)" strokeWidth={2} dot={{ r: 3, fill: "hsl(0, 72%, 51%)" }} connectNulls />
           </ComposedChart>
         </ResponsiveContainer>
         <div className="flex items-center gap-4 mt-2 justify-center text-xs text-muted-foreground">
-          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(35, 90%, 55%)" }} /> 2024</span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(210, 80%, 55%)" }} /> 2024</span>
           <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(270, 60%, 55%)" }} /> 2025</span>
           <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-0.5 rounded" style={{ background: "hsl(0, 72%, 51%)" }} /> 3M Return</span>
         </div>

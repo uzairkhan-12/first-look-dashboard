@@ -1,6 +1,5 @@
 import { ipoData, ipoPerformance } from "@/data/ipoData";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, LineChart, Line, CartesianGrid, ReferenceLine } from "recharts";
-import riyadhImage from "@/assets/riyadh-kafd.jpg";
 
 // Brunswick brand palette
 const NAVY = "hsl(240, 56%, 22%)";
@@ -77,15 +76,8 @@ const ThoughtLeadershipTab = () => {
     <div className="animate-fade-in max-w-[900px] mx-auto">
       <div className="rounded-xl overflow-hidden shadow-2xl border-2" style={{ borderColor: NAVY, background: "#fff" }}>
 
-        {/* ── COVER HEADER WITH KAFD IMAGE ── */}
-        <div className="relative overflow-hidden" style={{ minHeight: 320 }}>
-          <img
-            src={riyadhImage}
-            alt="King Abdullah Financial District, Riyadh"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${NAVY}cc 0%, ${NAVY}ee 60%, ${NAVY} 100%)` }} />
-          <div className="relative z-10 px-8 py-14 text-center">
+        {/* ── COVER HEADER ── */}
+        <div className="px-8 py-12 text-center" style={{ background: NAVY }}>
             <p className="text-xs uppercase tracking-[0.4em] font-medium mb-6" style={{ color: GOLD }}>
               B&nbsp;R&nbsp;U&nbsp;N&nbsp;S&nbsp;W&nbsp;I&nbsp;C&nbsp;K
             </p>
@@ -99,7 +91,6 @@ const ThoughtLeadershipTab = () => {
             <p className="text-xs mt-3 tracking-wide" style={{ color: "hsl(42, 30%, 80%)" }}>
               January 2026 · Capital Markets Advisory · Riyadh
             </p>
-          </div>
         </div>
 
         {/* ── KEY METRICS STRIP ── */}

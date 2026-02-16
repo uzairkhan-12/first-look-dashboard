@@ -174,9 +174,8 @@ const BrunswickInsightsTab = () => {
 
       {/* Disclaimer */}
       <div className="rounded-lg border border-border bg-muted/30 p-4">
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          <span className="font-semibold">Disclaimer:</span> These insights are based on publicly available market data from 2024–2025 Saudi Main Market IPOs and are intended for general informational purposes only. 
-          They do not constitute financial, legal, or investment advice. Companies should consult with their professional advisers before making IPO-related decisions.
+        <p className="text-xs text-muted-foreground leading-relaxed font-medium">
+          Indicative Recommendations
         </p>
       </div>
     </div>

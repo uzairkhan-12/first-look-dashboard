@@ -12,6 +12,7 @@ export interface IPORecord {
   retailCoverageMultiple: number;
   retailSubscriberCount: number | null;
   institutionalCoverageMultiple: number;
+  institutionalDemand: number;
   ipoSizeBucket: string;
 }
 

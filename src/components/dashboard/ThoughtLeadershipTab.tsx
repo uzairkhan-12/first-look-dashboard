@@ -1,5 +1,6 @@
 import { ipoData, ipoPerformance } from "@/data/ipoData";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, LineChart, Line, CartesianGrid, ReferenceLine } from "recharts";
+import riyadhImage from "@/assets/riyadh-kafd.jpg";
 
 // Brunswick brand palette
 const NAVY = "hsl(240, 56%, 22%)";
@@ -76,21 +77,44 @@ const ThoughtLeadershipTab = () => {
     <div className="animate-fade-in max-w-[900px] mx-auto">
       <div className="rounded-xl overflow-hidden shadow-2xl border-2" style={{ borderColor: NAVY, background: "#fff" }}>
 
-        {/* ── COVER HEADER ── */}
-        <div className="relative px-8 py-12 text-center" style={{ background: NAVY }}>
-          <p className="text-xs uppercase tracking-[0.4em] font-medium mb-6" style={{ color: GOLD }}>
-            B&nbsp;R&nbsp;U&nbsp;N&nbsp;S&nbsp;W&nbsp;I&nbsp;C&nbsp;K
-          </p>
-          <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight leading-tight mb-3" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
-            Saudi IPO Retail<br />Confidence Index
-          </h1>
-          <div className="w-16 h-0.5 mx-auto my-4" style={{ background: GOLD }} />
-          <p className="text-lg font-semibold text-white" style={{ fontFamily: "Georgia, serif" }}>
-            Q4 2025 Findings
-          </p>
-          <p className="text-xs mt-2" style={{ color: "hsl(240, 20%, 72%)" }}>
-            January 2026 · Capital Markets Advisory · Riyadh
-          </p>
+        {/* ── COVER HEADER WITH KAFD IMAGE ── */}
+        <div className="relative overflow-hidden" style={{ minHeight: 320 }}>
+          <img
+            src={riyadhImage}
+            alt="King Abdullah Financial District, Riyadh"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${NAVY}cc 0%, ${NAVY}ee 60%, ${NAVY} 100%)` }} />
+          <div className="relative z-10 px-8 py-14 text-center">
+            <p className="text-xs uppercase tracking-[0.4em] font-medium mb-6" style={{ color: GOLD }}>
+              B&nbsp;R&nbsp;U&nbsp;N&nbsp;S&nbsp;W&nbsp;I&nbsp;C&nbsp;K
+            </p>
+            <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight leading-tight mb-3" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
+              Saudi IPO Retail<br />Confidence Index
+            </h1>
+            <div className="w-16 h-0.5 mx-auto my-5" style={{ background: GOLD }} />
+            <p className="text-xl font-semibold text-white" style={{ fontFamily: "Georgia, serif" }}>
+              Q4 2025 Findings
+            </p>
+            <p className="text-xs mt-3 tracking-wide" style={{ color: "hsl(42, 30%, 80%)" }}>
+              January 2026 · Capital Markets Advisory · Riyadh
+            </p>
+          </div>
+        </div>
+
+        {/* ── KEY METRICS STRIP ── */}
+        <div className="grid grid-cols-2 md:grid-cols-4" style={{ background: NAVY_LIGHT }}>
+          {[
+            { label: "Composite Score", value: `${compositeScore}/100`, color: getScoreColor(compositeScore) },
+            { label: "IPOs in Quarter", value: "4", color: "#fff" },
+            { label: "Total Raised", value: `SAR ${(totalRaised / 1000).toFixed(1)}bn`, color: "#fff" },
+            { label: "Avg 3M Return", value: `${avg3MReturn > 0 ? "+" : ""}${avg3MReturn.toFixed(1)}%`, color: avg3MReturn >= 0 ? GREEN : RED },
+          ].map(m => (
+            <div key={m.label} className="px-5 py-4 text-center border-r last:border-r-0" style={{ borderColor: "hsl(240, 30%, 30%)" }}>
+              <p className="text-[9px] uppercase tracking-[0.15em] mb-1" style={{ color: "hsl(240, 20%, 65%)" }}>{m.label}</p>
+              <p className="text-lg font-bold font-mono" style={{ color: m.color }}>{m.value}</p>
+            </div>
+          ))}
         </div>
 
         {/* ── CONTENT ── */}

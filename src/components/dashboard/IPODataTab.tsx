@@ -1,5 +1,5 @@
 import { ipoData } from "@/data/ipoData";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, LabelList } from "recharts";
 
 const sizeChartData = ipoData.reduce((acc, ipo) => {
   const existing = acc.find(d => d.bucket === ipo.ipoSizeBucket);
@@ -34,6 +34,7 @@ const instDemandData = [...ipoData]
   .map(ipo => ({
     name: ipo.name.length > 14 ? ipo.name.substring(0, 12) + "…" : ipo.name,
     demand: ipo.institutionalCoverageMultiple * ipo.totalOfferSize,
+    coverage: ipo.institutionalCoverageMultiple,
     year: ipo.year,
   }))
   .sort((a, b) => b.demand - a.demand);
@@ -133,6 +134,7 @@ const IPODataTab = () => {
               formatter={(value: number) => [`${value.toLocaleString()} Mn`, "Inst. Demand"]}
             />
             <Bar dataKey="demand" radius={[4, 4, 0, 0]}>
+              <LabelList dataKey="coverage" position="top" formatter={(v: number) => `${v}x`} style={{ fill: "hsl(220, 10%, 45%)", fontSize: 9, fontWeight: 500 }} />
               {instDemandData.map((entry, i) => (
                 <Cell key={i} fill={entry.year === 2025 ? "hsl(270, 60%, 55%)" : "hsl(35, 90%, 55%)"} />
               ))}

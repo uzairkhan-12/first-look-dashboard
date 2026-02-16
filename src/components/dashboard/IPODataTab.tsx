@@ -144,14 +144,14 @@ const IPODataTab = () => {
 
             <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
               {amountRaisedData.map((entry, i) =>
-              <Cell key={i} fill={entry.year === 2025 ? "hsl(142, 70%, 45%)" : "hsl(210, 80%, 55%)"} />
+              <Cell key={i} fill={entry.year === 2025 ? "hsl(270, 60%, 55%)" : "hsl(210, 80%, 55%)"} />
               )}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
         <div className="flex items-center gap-4 mt-2 justify-center text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(210, 80%, 55%)" }} /> 2024</span>
-          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(142, 70%, 45%)" }} /> 2025</span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(270, 60%, 55%)" }} /> 2025</span>
         </div>
       </div>
 

@@ -30,6 +30,14 @@ const amountRaisedData = [...ipoData]
     year: ipo.year,
   }));
 
+const instDemandData = [...ipoData]
+  .map(ipo => ({
+    name: ipo.name.length > 14 ? ipo.name.substring(0, 12) + "…" : ipo.name,
+    demand: ipo.institutionalCoverageMultiple * ipo.totalOfferSize,
+    year: ipo.year,
+  }))
+  .sort((a, b) => b.demand - a.demand);
+
 const formatNum = (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1)}B` : `${n.toFixed(0)}M`;
 
 const IPODataTab = () => {
@@ -110,6 +118,30 @@ const IPODataTab = () => {
         <div className="flex items-center gap-4 mt-2 justify-center text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(210, 80%, 55%)" }} /> 2024</span>
           <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(142, 70%, 45%)" }} /> 2025</span>
+        </div>
+      </div>
+
+      {/* Total Institutional Demand */}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <h3 className="text-sm font-medium text-muted-foreground mb-4">Total Institutional Demand by IPO (SAR Mn)</h3>
+        <ResponsiveContainer width="100%" height={340}>
+          <BarChart data={instDemandData} margin={{ bottom: 60 }}>
+            <XAxis dataKey="name" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 10 }} angle={-45} textAnchor="end" interval={0} />
+            <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => formatNum(v)} />
+            <Tooltip
+              contentStyle={{ background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" }}
+              formatter={(value: number) => [`${value.toLocaleString()} Mn`, "Inst. Demand"]}
+            />
+            <Bar dataKey="demand" radius={[4, 4, 0, 0]}>
+              {instDemandData.map((entry, i) => (
+                <Cell key={i} fill={entry.year === 2025 ? "hsl(270, 60%, 55%)" : "hsl(35, 90%, 55%)"} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+        <div className="flex items-center gap-4 mt-2 justify-center text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(35, 90%, 55%)" }} /> 2024</span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(270, 60%, 55%)" }} /> 2025</span>
         </div>
       </div>
 

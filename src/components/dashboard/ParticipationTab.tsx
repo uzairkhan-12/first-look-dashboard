@@ -9,15 +9,13 @@ const getYearData = (year: number) => {
   const ipos = ipoData.filter(d => d.year === year);
   const avgRetailAlloc = ipos.reduce((s, d) => s + d.retailAllocationPercent, 0) / ipos.length;
   const avgRetailCov = ipos.reduce((s, d) => s + d.retailCoverageMultiple, 0) / ipos.length;
-  const iposExFlyNas = ipos.filter(d => d.ticker !== "4264");
-  const avgRetailCovEx = iposExFlyNas.length ? iposExFlyNas.reduce((s, d) => s + d.retailCoverageMultiple, 0) / iposExFlyNas.length : avgRetailCov;
   const avgInstCov = ipos.reduce((s, d) => s + d.institutionalCoverageMultiple, 0) / ipos.length;
   const medianRetailCov = [...ipos].sort((a, b) => a.retailCoverageMultiple - b.retailCoverageMultiple)[Math.floor(ipos.length / 2)].retailCoverageMultiple;
   const subscribersData = ipos.filter(d => d.retailSubscriberCount !== null);
   const avgSubscribers = subscribersData.length ? subscribersData.reduce((s, d) => s + d.retailSubscriberCount!, 0) / subscribersData.length : 0;
   const oversubscribed = ipos.filter(d => d.retailCoverageMultiple >= 1).length;
   const undersubscribed = ipos.filter(d => d.retailCoverageMultiple < 1).length;
-  return { ipos, avgRetailAlloc, avgRetailCov, avgRetailCovEx, avgInstCov, medianRetailCov, avgSubscribers, subscribersData, oversubscribed, undersubscribed };
+  return { ipos, avgRetailAlloc, avgRetailCov, avgInstCov, medianRetailCov, avgSubscribers, subscribersData, oversubscribed, undersubscribed };
 };
 
 const d24 = getYearData(2024);
@@ -25,7 +23,6 @@ const d25 = getYearData(2025);
 
 // Retail coverage by IPO
 const retailCoverageData = ipoData
-  .filter(d => d.ticker !== "4264") // Exclude FlyNas outlier
   .map(d => ({
     name: d.name.length > 10 ? d.name.substring(0, 8) + "…" : d.name,
     fullName: d.name,
@@ -58,7 +55,6 @@ const subscriberData = ipoData
 
 // Scatter: Size vs Coverage
 const scatterData = ipoData
-  .filter(d => d.ticker !== "4264")
   .map(d => ({
     name: d.name,
     size: d.totalOfferSize,
@@ -99,7 +95,7 @@ const ParticipationTab = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="rounded-lg border border-border bg-card p-4">
           <h3 className="text-sm font-medium text-muted-foreground mb-1">Retail Coverage Multiple by IPO</h3>
-          <p className="text-[10px] text-muted-foreground mb-4">Excludes FlyNas (349.7x). Blue = 2024, Purple = 2025</p>
+          <p className="text-[10px] text-muted-foreground mb-4">Blue = 2024, Purple = 2025</p>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={retailCoverageData}>
               <XAxis dataKey="name" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 8 }} angle={-40} textAnchor="end" height={60} />

@@ -23,8 +23,6 @@ const getYearMetrics = (year: number) => {
   const totalSize = ipos.reduce((s, d) => s + d.totalOfferSize, 0);
   const avgOfferPrice = ipos.reduce((s, d) => s + d.offerPrice, 0) / ipos.length;
   const avgRetailCov = ipos.reduce((s, d) => s + d.retailCoverageMultiple, 0) / ipos.length;
-  const iposExFlyNas = ipos.filter((d) => d.ticker !== "4264");
-  const avgRetailCovExFlyNas = iposExFlyNas.length ? iposExFlyNas.reduce((s, d) => s + d.retailCoverageMultiple, 0) / iposExFlyNas.length : avgRetailCov;
   const avgInstCov = ipos.reduce((s, d) => s + d.institutionalCoverageMultiple, 0) / ipos.length;
   const medianOfferSize = [...ipos].sort((a, b) => a.totalOfferSize - b.totalOfferSize)[Math.floor(ipos.length / 2)].totalOfferSize;
   const perfs3M = perfs.filter((d) => d.return3M !== null);
@@ -55,7 +53,7 @@ const getYearMetrics = (year: number) => {
     totalSize,
     avgOfferPrice,
     avgRetailCov,
-    avgRetailCovExFlyNas,
+    
     avgInstCov,
     medianOfferSize,
     avgReturn3M,
@@ -168,7 +166,7 @@ const SummaryTab = () => {
                 <span className="text-[10px] uppercase tracking-wider" style={{ color: "hsl(270, 60%, 55%)" }}>2025</span>
               </div>
             </div>
-            <MetricRow label="Avg Retail Coverage*" val2024={`${m24.avgRetailCovExFlyNas.toFixed(1)}x`} val2025={`${m25.avgRetailCovExFlyNas.toFixed(1)}x`} better={m24.avgRetailCovExFlyNas > m25.avgRetailCovExFlyNas ? "2024" : "2025"} />
+            <MetricRow label="Avg Retail Coverage" val2024={`${m24.avgRetailCov.toFixed(1)}x`} val2025={`${m25.avgRetailCov.toFixed(1)}x`} better={m24.avgRetailCov > m25.avgRetailCov ? "2024" : "2025"} />
             <MetricRow label="Avg Inst. Coverage" val2024={`${m24.avgInstCov.toFixed(1)}x`} val2025={`${m25.avgInstCov.toFixed(1)}x`} better={m24.avgInstCov > m25.avgInstCov ? "2024" : "2025"} />
             {m24.bestPerformer && <MetricRow label="Best Performer (3M)" val2024={`${m24.bestPerformer.name.substring(0, 12)} +${m24.bestPerformer.return3M}%`} val2025={m25.bestPerformer ? `${m25.bestPerformer.name.substring(0, 12)} ${m25.bestPerformer.return3M! > 0 ? "+" : ""}${m25.bestPerformer.return3M}%` : "—"} />}
             {m24.worstPerformer && <MetricRow label="Worst Performer (3M)" val2024={`${m24.worstPerformer.name.substring(0, 12)} ${m24.worstPerformer.return3M}%`} val2025={m25.worstPerformer ? `${m25.worstPerformer.name.substring(0, 12)} ${m25.worstPerformer.return3M}%` : "—"} />}
@@ -179,7 +177,7 @@ const SummaryTab = () => {
                 suggesting a notable shift in market conditions and investor sentiment.
               </p>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2 italic">* Excludes FlyNas (349.7x retail coverage) as an outlier</p>
+            
           </div>
         </div>
       </div>

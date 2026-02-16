@@ -13,8 +13,7 @@ const AMBER = "hsl(35, 90%, 55%)";
 
 const calcParticipationScore = (year: number) => {
   const ipos = ipoData.filter(d => d.year === year);
-  const iposEx = ipos.filter(d => d.ticker !== "4264");
-  const avgCov = iposEx.reduce((s, d) => s + d.retailCoverageMultiple, 0) / iposEx.length;
+  const avgCov = ipos.reduce((s, d) => s + d.retailCoverageMultiple, 0) / ipos.length;
   const oversubscribed = ipos.filter(d => d.retailCoverageMultiple >= 1).length / ipos.length;
   // Score: coverage component (0-50) + subscription rate component (0-50)
   const covScore = Math.min(avgCov / 20 * 50, 50); // 20x = max score

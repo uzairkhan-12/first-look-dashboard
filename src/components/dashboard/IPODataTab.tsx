@@ -46,15 +46,17 @@ const instDemandData = [...ipoData]
 const combinedDemandData = [...ipoData]
   .map(ipo => {
     const perf = ipoPerformance.find(p => p.ticker === ipo.ticker);
-    const combinedMultiple = ipo.institutionalCoverageMultiple + ipo.retailCoverageMultiple;
+    const instDemandValue = ipo.institutionalCoverageMultiple * ipo.totalOfferSize;
+    const retailDemandValue = ipo.retailCoverageMultiple * ipo.retailTrancheShares * ipo.offerPrice;
+    const normalizedDemand = (instDemandValue + retailDemandValue) / ipo.totalOfferSize;
     return {
       name: ipo.name.length > 14 ? ipo.name.substring(0, 12) + "…" : ipo.name,
-      combinedMultiple,
+      normalizedDemand: Math.round(normalizedDemand * 10) / 10,
       return3M: perf?.return3M ?? null,
       year: ipo.year,
     };
   })
-  .sort((a, b) => b.combinedMultiple - a.combinedMultiple);
+  .sort((a, b) => b.normalizedDemand - a.normalizedDemand);
 
 const formatNum = (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1)}B` : `${n.toFixed(0)}M`;
 
@@ -178,7 +180,7 @@ const IPODataTab = () => {
 
       {/* Combined Normalized Demand */}
       <div className="rounded-lg border border-border bg-card p-4">
-        <h3 className="text-sm font-medium text-muted-foreground mb-4">Combined Normalized Demand (Inst. + Retail Coverage Multiple)</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-4">Combined Normalized Demand ((Inst. Demand + Retail Demand) / Offer Size)</h3>
         <ResponsiveContainer width="100%" height={380}>
           <ComposedChart data={combinedDemandData} margin={{ bottom: 60, right: 10 }}>
             <XAxis dataKey="name" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 10 }} angle={-45} textAnchor="end" interval={0} />
@@ -189,11 +191,11 @@ const IPODataTab = () => {
               contentStyle={{ background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" }}
               formatter={(value: number, name: string) => {
                 if (name === "return3M") return [`${value}%`, "3M Return"];
-                return [`${value.toFixed(1)}x`, "Combined Multiple"];
+                return [`${value.toFixed(1)}x`, "Normalized Demand"];
               }}
             />
-            <Bar yAxisId="left" dataKey="combinedMultiple" radius={[4, 4, 0, 0]}>
-              <LabelList dataKey="combinedMultiple" position="top" formatter={(v: number) => `${v.toFixed(0)}x`} style={{ fill: "hsl(220, 10%, 45%)", fontSize: 9, fontWeight: 500 }} />
+            <Bar yAxisId="left" dataKey="normalizedDemand" radius={[4, 4, 0, 0]}>
+              <LabelList dataKey="normalizedDemand" position="top" formatter={(v: number) => `${v.toFixed(0)}x`} style={{ fill: "hsl(220, 10%, 45%)", fontSize: 9, fontWeight: 500 }} />
               {combinedDemandData.map((entry, i) => (
                 <Cell key={i} fill={entry.year === 2025 ? "hsl(270, 60%, 55%)" : "hsl(210, 80%, 55%)"} />
               ))}

@@ -12,6 +12,7 @@ import RetailConfidenceIndexTab from "@/components/dashboard/RetailConfidenceInd
 import BrunswickInsightsTab from "@/components/dashboard/BrunswickInsightsTab";
 import ThoughtLeadershipTab from "@/components/dashboard/ThoughtLeadershipTab";
 import LockScreen from "@/components/LockScreen";
+import kafdImage from "@/assets/kafd-riyadh.jpg";
 
 const LOCK_CODE = "KSADB@2026";
 const Index = () => {
@@ -31,17 +32,23 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border px-6 py-4">
-        <div className="max-w-[1400px] mx-auto flex items-center justify-between">
+      {/* Hero Header with KAFD Image */}
+      <header className="relative overflow-hidden border-b border-border">
+        <img
+          src={kafdImage}
+          alt="King Abdullah Financial District, Riyadh"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[hsl(220,20%,12%)/0.88] via-[hsl(220,20%,12%)/0.82] to-[hsl(220,20%,12%)/0.7]" />
+        <div className="relative z-10 max-w-[1400px] mx-auto px-6 py-6 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-foreground tracking-tight">
+            <h1 className="text-xl font-semibold text-white tracking-tight">
               <span className="text-primary">◆</span> Saudi Main Market IPO Data Room
             </h1>
-            <p className="text-xs text-muted-foreground mt-0.5">2024–2025 IPO Performance, TASI Analysis & Retail Confidence Index</p>
+            <p className="text-xs text-white/60 mt-0.5">2024–2025 IPO Performance, TASI Analysis & Retail Confidence Index</p>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs font-mono text-muted-foreground">Last updated: Feb 15, 2026</span>
+            <span className="text-xs font-mono text-white/50">Last updated: Feb 15, 2026</span>
             <span className="inline-block w-2 h-2 rounded-full bg-primary animate-pulse" />
           </div>
         </div>

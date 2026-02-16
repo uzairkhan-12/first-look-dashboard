@@ -133,7 +133,7 @@ const IPODataTab = () => {
           <ComposedChart data={instDemandData} margin={{ bottom: 60, right: 10 }}>
             <XAxis dataKey="name" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 10 }} angle={-45} textAnchor="end" interval={0} />
             <YAxis yAxisId="left" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => formatNum(v)} />
-            <YAxis yAxisId="right" orientation="right" tick={{ fill: "hsl(0, 72%, 51%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} label={{ value: "3M Return", angle: 90, position: "insideRight", style: { fill: "hsl(0, 72%, 51%)", fontSize: 11 }, dx: 15 }} />
+            <YAxis yAxisId="right" orientation="right" tick={{ fill: "hsl(220, 10%, 55%)", fontSize: 11 }} tickFormatter={(v) => `${v}%`} label={{ value: "3M Return", angle: 90, position: "insideRight", style: { fill: "hsl(220, 10%, 55%)", fontSize: 11 }, dx: 15 }} />
             <ReferenceLine yAxisId="right" y={0} stroke="hsl(220, 10%, 70%)" strokeDasharray="3 3" />
             <Tooltip
               contentStyle={{ background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" }}
@@ -148,13 +148,18 @@ const IPODataTab = () => {
                 <Cell key={i} fill={entry.year === 2025 ? "hsl(270, 60%, 55%)" : "hsl(210, 80%, 55%)"} />
               ))}
             </Bar>
-            <Line yAxisId="right" type="monotone" dataKey="return3M" stroke="hsl(0, 72%, 51%)" strokeWidth={2} dot={{ r: 3, fill: "hsl(0, 72%, 51%)" }} connectNulls />
+            <Line yAxisId="right" type="monotone" dataKey="return3M" stroke="hsl(220, 10%, 70%)" strokeWidth={2} dot={(props: any) => {
+              const { cx, cy, payload } = props;
+              if (payload.return3M == null) return null;
+              const color = payload.return3M >= 0 ? "hsl(142, 70%, 45%)" : "hsl(0, 72%, 51%)";
+              return <circle cx={cx} cy={cy} r={4} fill={color} stroke={color} />;
+            }} connectNulls />
           </ComposedChart>
         </ResponsiveContainer>
         <div className="flex items-center gap-4 mt-2 justify-center text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(210, 80%, 55%)" }} /> 2024</span>
           <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-3 rounded-sm" style={{ background: "hsl(270, 60%, 55%)" }} /> 2025</span>
-          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-0.5 rounded" style={{ background: "hsl(0, 72%, 51%)" }} /> 3M Return</span>
+          <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-0.5 rounded" style={{ background: "hsl(220, 10%, 70%)" }} /> 3M Return</span>
         </div>
       </div>
 

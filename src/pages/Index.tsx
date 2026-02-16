@@ -10,7 +10,7 @@ import SentimentTab from "@/components/dashboard/SentimentTab";
 import EngagementTab from "@/components/dashboard/EngagementTab";
 import RetailConfidenceIndexTab from "@/components/dashboard/RetailConfidenceIndexTab";
 import BrunswickInsightsTab from "@/components/dashboard/BrunswickInsightsTab";
-import ThoughtLeadershipTab from "@/components/dashboard/ThoughtLeadershipTab";
+
 import LockScreen from "@/components/LockScreen";
 
 
@@ -82,9 +82,6 @@ const Index = () => {
             <TabsTrigger value="insights" className="data-[state=active]:bg-card data-[state=active]:text-primary font-medium text-xs">
               ◆ Brunswick Insights
             </TabsTrigger>
-            <TabsTrigger value="thought-leadership" className="data-[state=active]:bg-card data-[state=active]:text-primary font-medium text-xs">
-              ◆ Thought Leadership
-            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="confidence-index">
@@ -116,9 +113,6 @@ const Index = () => {
           </TabsContent>
           <TabsContent value="insights">
             <BrunswickInsightsTab />
-          </TabsContent>
-          <TabsContent value="thought-leadership">
-            <ThoughtLeadershipTab />
           </TabsContent>
         </Tabs>
       </main>

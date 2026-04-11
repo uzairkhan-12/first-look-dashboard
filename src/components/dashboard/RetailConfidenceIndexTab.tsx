@@ -211,21 +211,57 @@ const RetailConfidenceIndexTab = () => {
       </div>
 
       {/* Quarterly Trend */}
-      <div className="rounded-lg border border-border bg-card p-4">
-        <h3 className="text-sm font-medium text-muted-foreground mb-1">Quarterly Index Trend</h3>
-        <p className="text-[10px] text-muted-foreground mb-4">Illustrative — shows how the composite index would be tracked over time</p>
-        <ResponsiveContainer width="100%" height={280}>
-          <LineChart data={quarterlyTrend}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(40, 15%, 88%)" />
-            <XAxis dataKey="quarter" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 9 }} />
-            <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} domain={[0, 100]} />
-            <Tooltip contentStyle={TOOLTIP_STYLE} />
-            <Legend wrapperStyle={{ color: "hsl(220, 10%, 45%)" }} />
-            <Line type="monotone" dataKey="index" stroke="hsl(220, 20%, 12%)" strokeWidth={3} name="Composite" dot={{ fill: "hsl(220, 20%, 12%)", r: 4 }} />
-            <Line type="monotone" dataKey="participation" stroke={GREEN} strokeWidth={1.5} strokeDasharray="4 4" name="Participation" dot={false} />
-            <Line type="monotone" dataKey="aftermarket" stroke={RED} strokeWidth={1.5} strokeDasharray="4 4" name="Aftermarket" dot={false} />
-            <Line type="monotone" dataKey="sentiment" stroke={BLUE} strokeWidth={1.5} strokeDasharray="4 4" name="Sentiment" dot={false} />
-            <Line type="monotone" dataKey="engagement" stroke={AMBER} strokeWidth={1.5} strokeDasharray="4 4" name="Engagement" dot={false} />
+      <div className="rounded-lg border border-border bg-card p-6">
+        <div className="flex items-baseline justify-between mb-1">
+          <h3 className="text-sm font-semibold text-foreground" style={{ fontFamily: "Georgia, serif", color: "#1C2B4A" }}>Quarterly Index Trend</h3>
+        </div>
+        <p className="text-[10px] text-muted-foreground mb-5">Illustrative — shows how the composite index would be tracked over time</p>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={quarterlyTrend} margin={{ top: 10, right: 30, left: 5, bottom: 5 }}>
+            <defs>
+              <linearGradient id="compositeGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#1C2B4A" stopOpacity={0.15} />
+                <stop offset="100%" stopColor="#1C2B4A" stopOpacity={0.01} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid vertical={false} stroke="hsl(220, 15%, 90%)" strokeDasharray="none" />
+            <XAxis
+              dataKey="quarter"
+              tick={{ fill: "#1C2B4A", fontSize: 10, fontFamily: "Georgia, serif" }}
+              axisLine={{ stroke: "hsl(220, 15%, 85%)" }}
+              tickLine={false}
+              dy={8}
+            />
+            <YAxis
+              tick={{ fill: "#1C2B4A", fontSize: 10, fontFamily: "Georgia, serif" }}
+              domain={[0, 100]}
+              axisLine={false}
+              tickLine={false}
+              tickCount={6}
+              dx={-5}
+            />
+            <Tooltip
+              contentStyle={{
+                background: "hsl(40, 25%, 99%)",
+                border: "1px solid hsl(220, 15%, 85%)",
+                borderRadius: 8,
+                color: "#1C2B4A",
+                fontFamily: "Georgia, serif",
+                fontSize: 11,
+                boxShadow: "0 4px 12px rgba(28, 43, 74, 0.08)",
+              }}
+              formatter={(v: number, name: string) => [`${v}`, name]}
+              labelStyle={{ fontWeight: 600, color: "#1C2B4A", marginBottom: 4 }}
+            />
+            <Legend
+              wrapperStyle={{ color: "#1C2B4A", fontFamily: "Georgia, serif", fontSize: 11, paddingTop: 12 }}
+              iconType="line"
+            />
+            <Line type="monotone" dataKey="index" stroke="#1C2B4A" strokeWidth={2.5} name="Composite" dot={{ fill: "#1C2B4A", r: 3.5, strokeWidth: 0 }} activeDot={{ r: 5, fill: "#1C2B4A", stroke: "hsl(40, 25%, 95%)", strokeWidth: 2 }} />
+            <Line type="monotone" dataKey="participation" stroke={GREEN} strokeWidth={1.2} strokeDasharray="6 3" name="Participation" dot={false} opacity={0.7} />
+            <Line type="monotone" dataKey="aftermarket" stroke={RED} strokeWidth={1.2} strokeDasharray="6 3" name="Aftermarket" dot={false} opacity={0.7} />
+            <Line type="monotone" dataKey="sentiment" stroke={BLUE} strokeWidth={1.2} strokeDasharray="6 3" name="Sentiment" dot={false} opacity={0.7} />
+            <Line type="monotone" dataKey="engagement" stroke={AMBER} strokeWidth={1.2} strokeDasharray="6 3" name="Engagement" dot={false} opacity={0.7} />
           </LineChart>
         </ResponsiveContainer>
       </div>

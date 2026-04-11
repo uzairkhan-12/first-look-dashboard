@@ -34,7 +34,7 @@ const PerformanceTab = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Avg 3M Return</p>
           <p className={`text-2xl font-mono font-bold ${avg3M >= 0 ? "text-up" : "text-down"}`}>{avg3M >= 0 ? "+" : ""}{avg3M.toFixed(1)}%</p>
@@ -50,6 +50,10 @@ const PerformanceTab = () => {
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">2025 IPOs</p>
           <p className="text-2xl font-mono font-bold text-foreground">{ipoPerformance.filter(d => d.year === 2025).length}</p>
+        </div>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1">2026 IPOs</p>
+          <p className="text-2xl font-mono font-bold text-foreground">{ipoPerformance.filter(d => d.year === 2026).length}</p>
         </div>
       </div>
 
@@ -80,12 +84,15 @@ const PerformanceTab = () => {
                 <th className="text-left px-4 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">Name</th>
                 <th className="text-center px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">Year</th>
                 <th className="text-right px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">List Price</th>
+                <th className="text-right px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">1M Ret</th>
                 <th className="text-right px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">3M Ret</th>
                 <th className="text-right px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">6M Ret</th>
                 <th className="text-right px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">9M Ret</th>
+                <th className="text-right px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">1M Abn</th>
                 <th className="text-right px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">3M Abn</th>
                 <th className="text-right px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">6M Abn</th>
                 <th className="text-right px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">9M Abn</th>
+                <th className="text-center px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">Below 1M</th>
                 <th className="text-center px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">Below 3M</th>
                 <th className="text-center px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">Below 6M</th>
                 <th className="text-center px-2 py-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">Below 9M</th>
@@ -97,12 +104,15 @@ const PerformanceTab = () => {
                   <td className="px-4 py-2 font-medium text-foreground whitespace-nowrap">{ipo.name}</td>
                   <td className="px-2 py-2 font-mono text-center text-muted-foreground">{ipo.year}</td>
                   <td className="px-2 py-2 font-mono text-right text-foreground">{ipo.priceAtListing}</td>
+                  <td className="px-2 py-2 text-right"><ReturnCell value={ipo.return1M} /></td>
                   <td className="px-2 py-2 text-right"><ReturnCell value={ipo.return3M} /></td>
                   <td className="px-2 py-2 text-right"><ReturnCell value={ipo.return6M} /></td>
                   <td className="px-2 py-2 text-right"><ReturnCell value={ipo.return9M} /></td>
+                  <td className="px-2 py-2 text-right"><ReturnCell value={ipo.abnormalReturn1M} /></td>
                   <td className="px-2 py-2 text-right"><ReturnCell value={ipo.abnormalReturn3M} /></td>
                   <td className="px-2 py-2 text-right"><ReturnCell value={ipo.abnormalReturn6M} /></td>
                   <td className="px-2 py-2 text-right"><ReturnCell value={ipo.abnormalReturn9M} /></td>
+                  <td className="px-2 py-2 text-center"><BoolCell value={ipo.belowIssue1M} /></td>
                   <td className="px-2 py-2 text-center"><BoolCell value={ipo.belowIssue3M} /></td>
                   <td className="px-2 py-2 text-center"><BoolCell value={ipo.belowIssue6M} /></td>
                   <td className="px-2 py-2 text-center"><BoolCell value={ipo.belowIssue9M} /></td>

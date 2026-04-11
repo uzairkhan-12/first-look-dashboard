@@ -221,8 +221,6 @@ const RetailConfidenceIndexTab = () => {
             <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} domain={[0, 100]} />
             <Tooltip contentStyle={TOOLTIP_STYLE} />
             <Legend wrapperStyle={{ color: "hsl(220, 10%, 45%)" }} />
-            <ReferenceLine y={60} stroke={GREEN} strokeDasharray="4 4" label={{ value: "Confident", fill: GREEN, fontSize: 9 }} />
-            <ReferenceLine y={40} stroke={AMBER} strokeDasharray="4 4" label={{ value: "Cautious", fill: AMBER, fontSize: 9 }} />
             <Line type="monotone" dataKey="index" stroke="hsl(220, 20%, 12%)" strokeWidth={3} name="Composite" dot={{ fill: "hsl(220, 20%, 12%)", r: 4 }} />
             <Line type="monotone" dataKey="participation" stroke={GREEN} strokeWidth={1.5} strokeDasharray="4 4" name="Participation" dot={false} />
             <Line type="monotone" dataKey="aftermarket" stroke={RED} strokeWidth={1.5} strokeDasharray="4 4" name="Aftermarket" dot={false} />

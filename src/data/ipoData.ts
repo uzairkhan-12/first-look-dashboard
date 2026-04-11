@@ -17,6 +17,7 @@ export interface IPORecord {
 }
 
 export const ipoData: IPORecord[] = [
+  { name: "Saleh Al Rashed", year: 2026, ticker: "1324", sector: "Industrial Manufacturing", listingDate: "11/3/26", offerPrice: 45, totalOfferShares: 5.58, totalOfferSize: 251, retailTrancheShares: 1.674, retailAllocationPercent: 30, retailCoverageMultiple: 1.61, retailSubscriberCount: 38316, institutionalCoverageMultiple: 67.6, institutionalDemand: 16974.36, ipoSizeBucket: "<500m" },
   { name: "Derayah Financial", year: 2025, ticker: "4084", sector: "Financial services", listingDate: "3/10/25", offerPrice: 30, totalOfferShares: 49.95, totalOfferSize: 1498.41, retailTrancheShares: 4.99, retailAllocationPercent: 10, retailCoverageMultiple: 15, retailSubscriberCount: 586422, institutionalCoverageMultiple: 162, institutionalDemand: 242757, ipoSizeBucket: "1,000-1,999m" },
   { name: "Entaj", year: 2025, ticker: "2287", sector: "Food & Poultry", listingDate: "3/17/25", offerPrice: 50, totalOfferShares: 9, totalOfferSize: 450, retailTrancheShares: 0.9, retailAllocationPercent: 10, retailCoverageMultiple: 30, retailSubscriberCount: null, institutionalCoverageMultiple: 208, institutionalDemand: 93600, ipoSizeBucket: "<500m" },
   { name: "Masar", year: 2025, ticker: "4325", sector: "Real Estate", listingDate: "3/24/25", offerPrice: 15, totalOfferShares: 130.79, totalOfferSize: 1961.79, retailTrancheShares: 13.08, retailAllocationPercent: 10, retailCoverageMultiple: 20, retailSubscriberCount: 1048530, institutionalCoverageMultiple: 241, institutionalDemand: 472805.85, ipoSizeBucket: "1,000-1,999m" },
@@ -51,18 +52,23 @@ export interface IPOPerformance {
   ticker: string;
   listingDate: string;
   priceAtListing: number;
+  priceAt1M: number | null;
   priceAt3M: number | null;
   priceAt6M: number | null;
   priceAt9M: number | null;
+  return1M: number | null;
   return3M: number | null;
   return6M: number | null;
   return9M: number | null;
+  tasiReturn1M: number | null;
   tasiReturn3M: number | null;
   tasiReturn6M: number | null;
   tasiReturn9M: number | null;
+  abnormalReturn1M: number | null;
   abnormalReturn3M: number | null;
   abnormalReturn6M: number | null;
   abnormalReturn9M: number | null;
+  belowIssue1M: boolean | null;
   belowIssue3M: boolean | null;
   belowIssue6M: boolean | null;
   belowIssue9M: boolean | null;

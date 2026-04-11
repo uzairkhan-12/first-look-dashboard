@@ -4,36 +4,38 @@ import { RadialBarChart, RadialBar, ResponsiveContainer, BarChart, Bar, XAxis, Y
 const TOOLTIP_STYLE = { background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" };
 const BLUE = "hsl(210, 80%, 55%)";
 const PURPLE = "hsl(270, 60%, 55%)";
+const TEAL = "hsl(175, 60%, 45%)";
 const GREEN = "hsl(142, 70%, 45%)";
 const RED = "hsl(0, 72%, 51%)";
 const AMBER = "hsl(35, 90%, 55%)";
 
 // ─── Scoring Logic ───────────────────────────────────────────
-// Each bucket is scored 0-100, then weighted to produce composite index
-
 const calcParticipationScore = (year: number) => {
   const ipos = ipoData.filter(d => d.year === year);
+  if (ipos.length === 0) return 0;
   const avgCov = ipos.reduce((s, d) => s + d.retailCoverageMultiple, 0) / ipos.length;
   const oversubscribed = ipos.filter(d => d.retailCoverageMultiple >= 1).length / ipos.length;
-  // Score: coverage component (0-50) + subscription rate component (0-50)
-  const covScore = Math.min(avgCov / 20 * 50, 50); // 20x = max score
+  const covScore = Math.min(avgCov / 20 * 50, 50);
   const subScore = oversubscribed * 50;
   return Math.round(covScore + subScore);
 };
 
 const calcAftermarketScore = (year: number) => {
-  const perfs = ipoPerformance.filter(d => d.year === year && d.return3M !== null);
-  const aboveOffer = perfs.filter(d => !d.belowIssue3M).length / perfs.length;
-  const avgReturn = perfs.reduce((s, d) => s + d.return3M!, 0) / perfs.length;
-  // Score: above offer % (0-50) + return component (0-50)
+  // Use 3M returns where available, fall back to 1M for recent IPOs
+  const perfs = ipoPerformance.filter(d => d.year === year && (d.return3M !== null || d.return1M !== null));
+  if (perfs.length === 0) return 0;
+  const aboveOffer = perfs.filter(d => {
+    if (d.belowIssue3M !== null) return !d.belowIssue3M;
+    return d.belowIssue1M !== null ? !d.belowIssue1M : false;
+  }).length / perfs.length;
+  const avgReturn = perfs.reduce((s, d) => s + (d.return3M ?? d.return1M ?? 0), 0) / perfs.length;
   const offerScore = aboveOffer * 50;
-  const returnScore = Math.max(0, Math.min(((avgReturn + 50) / 100) * 50, 50)); // -50% = 0, +50% = 50
+  const returnScore = Math.max(0, Math.min(((avgReturn + 50) / 100) * 50, 50));
   return Math.round(offerScore + returnScore);
 };
 
-// Illustrative sentiment/engagement scores
-const sentimentScores = { 2024: 68, 2025: 28 };
-const engagementScores = { 2024: 72, 2025: 38 };
+const sentimentScores: Record<number, number> = { 2024: 68, 2025: 28, 2026: 42 };
+const engagementScores: Record<number, number> = { 2024: 72, 2025: 38, 2026: 45 };
 
 const WEIGHTS = {
   participation: 0.30,
@@ -45,8 +47,8 @@ const WEIGHTS = {
 const buildScorecard = (year: number) => {
   const participation = calcParticipationScore(year);
   const aftermarket = calcAftermarketScore(year);
-  const sentiment = year === 2024 ? sentimentScores[2024] : sentimentScores[2025];
-  const engagement = year === 2024 ? engagementScores[2024] : engagementScores[2025];
+  const sentiment = sentimentScores[year] ?? 0;
+  const engagement = engagementScores[year] ?? 0;
   const composite = Math.round(
     participation * WEIGHTS.participation +
     aftermarket * WEIGHTS.aftermarket +
@@ -58,6 +60,7 @@ const buildScorecard = (year: number) => {
 
 const score24 = buildScorecard(2024);
 const score25 = buildScorecard(2025);
+const score26 = buildScorecard(2026);
 
 const getGrade = (score: number) => {
   if (score >= 80) return { grade: "A", label: "Strong Confidence", color: GREEN };
@@ -69,20 +72,17 @@ const getGrade = (score: number) => {
 
 const grade24 = getGrade(score24.composite);
 const grade25 = getGrade(score25.composite);
+const grade26 = getGrade(score26.composite);
 
-// Radial data for gauge
-const gaugeData24 = [{ name: "Score", value: score24.composite, fill: grade24.color }];
-const gaugeData25 = [{ name: "Score", value: score25.composite, fill: grade25.color }];
+const YEAR_COLOR: Record<number, string> = { 2024: BLUE, 2025: PURPLE, 2026: TEAL };
 
-// Bucket comparison
 const bucketComparison = [
-  { bucket: "Participation", "2024": score24.participation, "2025": score25.participation, weight: "30%" },
-  { bucket: "Aftermarket", "2024": score24.aftermarket, "2025": score25.aftermarket, weight: "30%" },
-  { bucket: "Sentiment", "2024": score24.sentiment, "2025": score25.sentiment, weight: "20%" },
-  { bucket: "Engagement", "2024": score24.engagement, "2025": score25.engagement, weight: "20%" },
+  { bucket: "Participation", "2024": score24.participation, "2025": score25.participation, "2026": score26.participation, weight: "30%" },
+  { bucket: "Aftermarket", "2024": score24.aftermarket, "2025": score25.aftermarket, "2026": score26.aftermarket, weight: "30%" },
+  { bucket: "Sentiment", "2024": score24.sentiment, "2025": score25.sentiment, "2026": score26.sentiment, weight: "20%" },
+  { bucket: "Engagement", "2024": score24.engagement, "2025": score25.engagement, "2026": score26.engagement, weight: "20%" },
 ];
 
-// Illustrative quarterly trend
 const quarterlyTrend = [
   { quarter: "Q1 2024", index: 62, participation: 55, aftermarket: 72, sentiment: 62, engagement: 65 },
   { quarter: "Q2 2024", index: 71, participation: 65, aftermarket: 80, sentiment: 68, engagement: 72 },
@@ -92,6 +92,7 @@ const quarterlyTrend = [
   { quarter: "Q2 2025", index: 38, participation: 35, aftermarket: 35, sentiment: 35, engagement: 42 },
   { quarter: "Q3 2025", index: 32, participation: 30, aftermarket: 28, sentiment: 30, engagement: 38 },
   { quarter: "Q4 2025", index: 28, participation: 25, aftermarket: 22, sentiment: 28, engagement: 35 },
+  { quarter: "Q1 2026", index: score26.composite, participation: score26.participation, aftermarket: score26.aftermarket, sentiment: score26.sentiment, engagement: score26.engagement },
 ];
 
 const ScoreGauge = ({ score, grade, label, year, color }: { score: number; grade: string; label: string; year: number; color: string }) => (
@@ -115,7 +116,7 @@ const ScoreGauge = ({ score, grade, label, year, color }: { score: number; grade
         {grade}
       </span>
       <p className="text-[10px] text-muted-foreground mt-1">{label}</p>
-      <p className="text-xs font-semibold text-foreground mt-0.5" style={{ color: year === 2024 ? BLUE : PURPLE }}>{year}</p>
+      <p className="text-xs font-semibold text-foreground mt-0.5" style={{ color: YEAR_COLOR[year] ?? TEAL }}>{year}</p>
     </div>
   </div>
 );
@@ -151,7 +152,7 @@ const RetailConfidenceIndexTab = () => {
       </div>
 
       {/* Composite Gauges */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="rounded-lg border border-border bg-card p-5">
           <h3 className="text-sm font-medium text-muted-foreground text-center mb-2">Composite Index Score</h3>
           <div className="flex justify-center">
@@ -177,11 +178,25 @@ const RetailConfidenceIndexTab = () => {
             <BucketRow label="Engagement" score={score25.engagement} weight="20%" color={PURPLE} />
           </div>
         </div>
+
+        <div className="rounded-lg border border-border bg-card p-5">
+          <h3 className="text-sm font-medium text-muted-foreground text-center mb-2">Composite Index Score</h3>
+          <div className="flex justify-center">
+            <ScoreGauge score={score26.composite} grade={grade26.grade} label={grade26.label} year={2026} color={grade26.color} />
+          </div>
+          <div className="mt-4 space-y-0">
+            <BucketRow label="Participation" score={score26.participation} weight="30%" color={TEAL} />
+            <BucketRow label="Aftermarket" score={score26.aftermarket} weight="30%" color={TEAL} />
+            <BucketRow label="Sentiment" score={score26.sentiment} weight="20%" color={TEAL} />
+            <BucketRow label="Engagement" score={score26.engagement} weight="20%" color={TEAL} />
+          </div>
+          <p className="text-[10px] text-muted-foreground mt-3 text-center italic">Based on 1 IPO — early signal only</p>
+        </div>
       </div>
 
       {/* Bucket Comparison Chart */}
       <div className="rounded-lg border border-border bg-card p-4">
-        <h3 className="text-sm font-medium text-muted-foreground mb-4">Bucket Score Comparison: 2024 vs 2025</h3>
+        <h3 className="text-sm font-medium text-muted-foreground mb-4">Bucket Score Comparison: 2024 vs 2025 vs 2026</h3>
         <ResponsiveContainer width="100%" height={250}>
           <BarChart data={bucketComparison}>
             <XAxis dataKey="bucket" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 12 }} />
@@ -190,6 +205,7 @@ const RetailConfidenceIndexTab = () => {
             <Legend wrapperStyle={{ color: "hsl(220, 10%, 45%)" }} />
             <Bar dataKey="2024" fill={BLUE} radius={[4, 4, 0, 0]} />
             <Bar dataKey="2025" fill={PURPLE} radius={[4, 4, 0, 0]} />
+            <Bar dataKey="2026" fill={TEAL} radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

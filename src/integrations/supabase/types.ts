@@ -14,10 +14,70 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ipo_participation: {
+        Row: {
+          created_at: string | null
+          data_source: string | null
+          id: string
+          ipo_name: string
+          ipo_name_ar: string | null
+          ipo_size_sar_millions: number | null
+          is_undersubscribed: boolean | null
+          listing_date: string | null
+          notes: string | null
+          retail_allocation_pct: number | null
+          retail_coverage_multiple: number | null
+          retail_subscribers: number | null
+          updated_at: string | null
+          year: number
+        }
+        Insert: {
+          created_at?: string | null
+          data_source?: string | null
+          id?: string
+          ipo_name: string
+          ipo_name_ar?: string | null
+          ipo_size_sar_millions?: number | null
+          is_undersubscribed?: boolean | null
+          listing_date?: string | null
+          notes?: string | null
+          retail_allocation_pct?: number | null
+          retail_coverage_multiple?: number | null
+          retail_subscribers?: number | null
+          updated_at?: string | null
+          year: number
+        }
+        Update: {
+          created_at?: string | null
+          data_source?: string | null
+          id?: string
+          ipo_name?: string
+          ipo_name_ar?: string | null
+          ipo_size_sar_millions?: number | null
+          is_undersubscribed?: boolean | null
+          listing_date?: string | null
+          notes?: string | null
+          retail_allocation_pct?: number | null
+          retail_coverage_multiple?: number | null
+          retail_subscribers?: number | null
+          updated_at?: string | null
+          year?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      participation_kpis: {
+        Row: {
+          avg_retail_alloc_pct: number | null
+          avg_subscribers_thousands: number | null
+          median_retail_coverage: number | null
+          total_ipos: number | null
+          undersubscribed_count: number | null
+          year: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

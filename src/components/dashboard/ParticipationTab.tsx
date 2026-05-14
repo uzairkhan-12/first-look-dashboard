@@ -176,24 +176,28 @@ const ParticipationTab = () => {
         </p>
       </div>
 
-      {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        <MetricCard label="2024 Avg Retail Alloc" value={`${fmt0(k24?.avg_retail_alloc_pct)}%`} color="text-chart-line" />
-        <MetricCard label="2025 Avg Retail Alloc" value={`${fmt0(k25?.avg_retail_alloc_pct)}%`} color="text-chart-line" sub="↑ CMA mandate" />
-        <MetricCard label="2024 Med. Retail Cov" value={`${fmt1(k24?.median_retail_coverage)}x`} color="text-accent" />
-        <MetricCard label="2025 Med. Retail Cov" value={`${fmt1(k25?.median_retail_coverage)}x`} color="text-accent" />
-        <MetricCard
-          label="2025 Undersubscribed"
-          value={`${k25?.undersubscribed_count ?? 0}/${k25?.total_ipos ?? 0}`}
-          color={(k25?.undersubscribed_count ?? 0) > 0 ? "text-down" : "text-up"}
-          sub="Coverage < 1.0x"
-        />
-        <MetricCard
-          label="2024 Avg Subscribers"
-          value={`${fmt0(k24?.avg_subscribers_thousands)}K`}
-          sub="Per IPO with disclosed data"
-        />
-      </div>
+      {/* KPIs grouped by year */}
+      {([2024, 2025, 2026] as const).map((yr) => {
+        const k = kpis.find((x) => x.year === yr);
+        const colorClass = yr === 2024 ? "text-[hsl(210,80%,55%)]" : yr === 2025 ? "text-[hsl(270,60%,55%)]" : "text-[#2DD4BF]";
+        const borderClass = yr === 2024 ? "border-l-[hsl(210,80%,55%)]" : yr === 2025 ? "border-l-[hsl(270,60%,55%)]" : "border-l-[#2DD4BF]";
+        return (
+          <div key={yr} className={`rounded-lg border border-border border-l-4 ${borderClass} bg-card p-4`}>
+            <p className={`text-xs font-semibold uppercase tracking-wider mb-3 ${colorClass}`}>{yr}</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <MetricCard label="Avg Retail Allocation" value={`${fmt0(k?.avg_retail_alloc_pct)}%`} color={colorClass} />
+              <MetricCard label="Median Retail Coverage" value={`${fmt1(k?.median_retail_coverage)}x`} color={colorClass} />
+              <MetricCard
+                label="Undersubscribed"
+                value={`${k?.undersubscribed_count ?? 0}/${k?.total_ipos ?? 0}`}
+                color={colorClass}
+                sub="Coverage < 1.0x"
+              />
+              <MetricCard label="Avg Subscribers" value={`${fmt0(k?.avg_subscribers_thousands)}K`} color={colorClass} />
+            </div>
+          </div>
+        );
+      })}
 
       {/* Charts Row 1: Retail Coverage + Allocation */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

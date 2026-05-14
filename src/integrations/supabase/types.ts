@@ -28,6 +28,7 @@ export type Database = {
           retail_allocation_pct: number | null
           retail_coverage_multiple: number | null
           retail_subscribers: number | null
+          sector: string | null
           updated_at: string | null
           year: number
         }
@@ -44,6 +45,7 @@ export type Database = {
           retail_allocation_pct?: number | null
           retail_coverage_multiple?: number | null
           retail_subscribers?: number | null
+          sector?: string | null
           updated_at?: string | null
           year: number
         }
@@ -60,6 +62,7 @@ export type Database = {
           retail_allocation_pct?: number | null
           retail_coverage_multiple?: number | null
           retail_subscribers?: number | null
+          sector?: string | null
           updated_at?: string | null
           year?: number
         }

@@ -6,6 +6,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Refere
 const TOOLTIP_STYLE = { background: "hsl(40, 25%, 99%)", border: "1px solid hsl(40, 15%, 85%)", borderRadius: 8, color: "hsl(220, 20%, 12%)" };
 const BLUE = "hsl(210, 80%, 55%)";
 const PURPLE = "hsl(270, 60%, 55%)";
+const TEAL = "#2DD4BF";
+const yearColor = (y: number) => (y === 2024 ? BLUE : y === 2025 ? PURPLE : TEAL);
 
 interface IpoRow {
   ipo_name: string;
@@ -44,7 +46,7 @@ const ParticipationTab = () => {
       const { data, error } = await supabase
         .from("ipo_participation")
         .select("ipo_name, year, retail_coverage_multiple, retail_allocation_pct, retail_subscribers, ipo_size_sar_millions, is_undersubscribed, listing_date")
-        .in("year", [2024, 2025])
+        .in("year", [2024, 2025, 2026])
         .order("year", { ascending: true })
         .order("listing_date", { ascending: true });
       if (error) throw error;
@@ -171,7 +173,7 @@ const ParticipationTab = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="rounded-lg border border-border bg-card p-4">
           <h3 className="text-sm font-medium text-muted-foreground mb-1">Retail Coverage Multiple by IPO</h3>
-          <p className="text-[10px] text-muted-foreground mb-4">Blue = 2024, Purple = 2025</p>
+          <p className="text-[10px] text-muted-foreground mb-4">Blue = 2024, Purple = 2025, Teal = 2026</p>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={retailCoverageData}>
               <XAxis dataKey="name" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 8 }} angle={-40} textAnchor="end" height={60} />
@@ -180,7 +182,7 @@ const ParticipationTab = () => {
               <ReferenceLine y={1} stroke="hsl(0, 72%, 51%)" strokeDasharray="4 4" label={{ value: "1x", fill: "hsl(0, 72%, 51%)", fontSize: 10 }} />
               <Bar dataKey="coverage" radius={[3, 3, 0, 0]}>
                 {retailCoverageData.map((d, i) => (
-                  <Cell key={i} fill={d.year === 2024 ? BLUE : PURPLE} opacity={0.85} />
+                  <Cell key={i} fill={yearColor(d.year)} opacity={0.85} />
                 ))}
               </Bar>
             </BarChart>

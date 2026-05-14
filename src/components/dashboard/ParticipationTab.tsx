@@ -221,7 +221,7 @@ const ParticipationTab = () => {
               <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number) => [`${v.toFixed(0)}K`, "Subscribers"]} labelFormatter={(_, payload) => payload?.[0]?.payload?.fullName || ""} />
               <Bar dataKey="subscribers" radius={[3, 3, 0, 0]}>
                 {subscriberData.map((d, i) => (
-                  <Cell key={i} fill={d.year === 2024 ? BLUE : PURPLE} opacity={0.85} />
+                  <Cell key={i} fill={yearColor(d.year)} opacity={0.85} />
                 ))}
               </Bar>
             </BarChart>

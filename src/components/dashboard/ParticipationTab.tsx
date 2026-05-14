@@ -201,7 +201,7 @@ const ParticipationTab = () => {
               <ReferenceLine y={20} stroke="hsl(142, 55%, 35%)" strokeDasharray="4 4" label={{ value: "New min 20%", fill: "hsl(142, 55%, 35%)", fontSize: 9 }} />
               <Bar dataKey="allocation" radius={[3, 3, 0, 0]}>
                 {allocationData.map((d, i) => (
-                  <Cell key={i} fill={d.year === 2024 ? BLUE : PURPLE} opacity={0.85} />
+                  <Cell key={i} fill={yearColor(d.year)} opacity={0.85} />
                 ))}
               </Bar>
             </BarChart>

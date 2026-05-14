@@ -37,6 +37,32 @@ const MetricCard = ({ label, value, sub, color }: { label: string; value: string
   </div>
 );
 
+const ScatterTooltipContent = ({
+  active,
+  payload,
+}: {
+  active?: boolean;
+  payload?: Array<{
+    payload?: {
+      name?: string;
+      size?: number;
+      coverage?: number;
+    };
+  }>;
+}) => {
+  const point = payload?.[0]?.payload;
+
+  if (!active || !point) return null;
+
+  return (
+    <div style={TOOLTIP_STYLE} className="space-y-1 p-2 text-sm">
+      <p className="text-foreground">Company : {point.name}</p>
+      <p className="text-foreground">Size (Mn) : {Number(point.size ?? 0).toFixed(0)}M</p>
+      <p className="text-foreground">Coverage : {Number(point.coverage ?? 0).toFixed(1)}x</p>
+    </div>
+  );
+};
+
 const truncate = (s: string, n: number) => (s.length > n ? s.substring(0, n - 1) + "…" : s);
 
 const ParticipationTab = () => {
@@ -236,11 +262,7 @@ const ParticipationTab = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(40, 15%, 88%)" />
               <XAxis dataKey="size" name="Size (Mn)" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}M`} />
               <YAxis dataKey="coverage" name="Coverage" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}x`} />
-              <Tooltip
-                contentStyle={TOOLTIP_STYLE}
-                formatter={(v: number, name: string) => [name === "Size (Mn)" ? `${v.toFixed(0)}M` : `${v}x`, name]}
-                labelFormatter={(_, payload) => (payload?.[0]?.payload?.name ? `Company : ${payload[0].payload.name}` : "")}
-              />
+              <Tooltip content={<ScatterTooltipContent />} />
               <ReferenceLine y={1} stroke="hsl(0, 72%, 51%)" strokeDasharray="4 4" />
               <Scatter data={scatterData.filter((d) => d.year === 2024)} fill={BLUE} name="2024" />
               <Scatter data={scatterData.filter((d) => d.year === 2025)} fill={PURPLE} name="2025" />

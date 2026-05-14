@@ -236,10 +236,15 @@ const ParticipationTab = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(40, 15%, 88%)" />
               <XAxis dataKey="size" name="Size (Mn)" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}M`} />
               <YAxis dataKey="coverage" name="Coverage" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickFormatter={(v) => `${v}x`} />
-              <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v: number, name: string) => [name === "Size (Mn)" ? `${v.toFixed(0)}M` : `${v}x`, name]} labelFormatter={(_, payload) => payload?.[0]?.payload?.name || ""} />
+              <Tooltip
+                contentStyle={TOOLTIP_STYLE}
+                formatter={(v: number, name: string) => [name === "Size (Mn)" ? `${v.toFixed(0)}M` : `${v}x`, name]}
+                labelFormatter={(_, payload) => (payload?.[0]?.payload?.name ? `Company : ${payload[0].payload.name}` : "")}
+              />
               <ReferenceLine y={1} stroke="hsl(0, 72%, 51%)" strokeDasharray="4 4" />
               <Scatter data={scatterData.filter((d) => d.year === 2024)} fill={BLUE} name="2024" />
               <Scatter data={scatterData.filter((d) => d.year === 2025)} fill={PURPLE} name="2025" />
+              <Scatter data={scatterData.filter((d) => d.year === 2026)} fill={TEAL} name="2026" />
               <Legend wrapperStyle={{ color: "hsl(220, 10%, 45%)" }} />
             </ScatterChart>
           </ResponsiveContainer>
